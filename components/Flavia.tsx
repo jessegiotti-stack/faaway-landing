@@ -2,6 +2,15 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
+import {
+  revealCaption,
+  revealContainer,
+  revealImage,
+  revealItem,
+  revealLine,
+  revealLineContainer,
+  revealViewport,
+} from "@/lib/motion";
 
 /**
  * Seção 03 — Flávia.
@@ -9,11 +18,9 @@ import { motion } from "framer-motion";
  * Composição: retrato vertical à esquerda, texto em coluna estreita à direita,
  * deslocado para baixo (assimetria — não alinhar topo).
  *
- * Doutrina:
- *  - Retrato é âncora atmosférica, não "headshot corporativo".
- *  - Texto curto. Carrega autoria, não currículo.
- *  - Numeração editorial Low Tide ("03 — Flávia").
- *  - Único reveal pontual no nome em display.
+ * FASE D: aderiu ao sistema de reveals com stagger.
+ *  - Container orquestra: rótulo → imagem (paralelo) → caption →
+ *    headline (linha 1 + 2) → corpo.
  */
 export function Flavia() {
   return (
@@ -21,9 +28,18 @@ export function Flavia() {
       id="flavia"
       className="relative bg-bg px-6 py-28 text-text md:px-10 md:py-40"
     >
-      <div className="mx-auto grid max-w-[1280px] grid-cols-12 gap-x-6 gap-y-14 md:gap-y-20">
+      <motion.div
+        initial="hidden"
+        whileInView="show"
+        viewport={revealViewport}
+        variants={revealContainer}
+        className="mx-auto grid max-w-[1280px] grid-cols-12 gap-x-6 gap-y-14 md:gap-y-20"
+      >
         {/* Editorial label + divisor */}
-        <div className="col-span-12 flex items-baseline gap-4">
+        <motion.div
+          variants={revealItem}
+          className="col-span-12 flex items-baseline gap-4"
+        >
           <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-muted">
             03 — Flávia
           </span>
@@ -31,11 +47,14 @@ export function Flavia() {
           <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-text/40">
             (quem)
           </span>
-        </div>
+        </motion.div>
 
         {/* Retrato — coluna esquerda, vertical 4:5, ancora a seção */}
         <div className="col-span-12 md:col-start-1 md:col-span-5 lg:col-start-2 lg:col-span-4">
-          <div className="relative aspect-[4/5] w-full overflow-hidden bg-bg-deep">
+          <motion.div
+            variants={revealImage}
+            className="relative aspect-[4/5] w-full overflow-hidden bg-bg-deep"
+          >
             <Image
               src="/photos/portrait-flavia.jpg"
               alt="Retrato de Flávia Werneck"
@@ -44,29 +63,36 @@ export function Flavia() {
               quality={92}
               className="object-cover"
             />
-          </div>
-          <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.16em] text-text-muted">
+          </motion.div>
+          <motion.p
+            variants={revealCaption}
+            className="mt-3 font-mono text-[10px] uppercase tracking-[0.16em] text-text-muted"
+          >
             (Flávia Werneck · consultora)
-          </p>
+          </motion.p>
         </div>
 
         {/* Texto — coluna direita, deslocada para baixo */}
         <div className="col-span-12 md:col-start-7 md:col-span-6 md:mt-24 lg:col-start-8 lg:col-span-4 lg:mt-32">
           <motion.h2
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true, margin: "-15%" }}
-            transition={{ duration: 0.6, ease: [0.22, 0.61, 0.36, 1] }}
+            variants={revealLineContainer}
             className="font-display text-[clamp(40px,6vw,76px)] font-light uppercase leading-[0.9] tracking-[-0.035em] text-text"
           >
-            Flávia
-            <br />
-            <span className="italic font-light normal-case tracking-[-0.025em]">
+            <motion.span variants={revealLine} className="block">
+              Flávia
+            </motion.span>
+            <motion.span
+              variants={revealLine}
+              className="block italic font-light normal-case tracking-[-0.025em]"
+            >
               Werneck.
-            </span>
+            </motion.span>
           </motion.h2>
 
-          <div className="mt-8 space-y-5 font-body text-[15px] font-light leading-[1.62] text-text md:mt-12 md:text-[16px]">
+          <motion.div
+            variants={revealItem}
+            className="mt-8 space-y-5 font-body text-[15px] font-light leading-[1.62] text-text md:mt-12 md:text-[16px]"
+          >
             <p>
               Vinte anos atrás escolheu o ofício de planejar o que outros fariam
               em silêncio. Não largou desde então.
@@ -82,9 +108,9 @@ export function Flavia() {
             <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-text-muted">
               Baseada em Florianópolis — opera no mundo.
             </p>
-          </div>
+          </motion.div>
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 }

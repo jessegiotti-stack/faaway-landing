@@ -1,20 +1,24 @@
 "use client";
 
 import { motion } from "framer-motion";
+import {
+  revealCaption,
+  revealContainer,
+  revealImage,
+  revealItem,
+  revealLine,
+  revealLineContainer,
+  revealViewport,
+} from "@/lib/motion";
 
 /**
  * Seção 04 — Método.
  * Três etapas numeradas. Não é "processo de venda" — é descrição
  * editorial de como uma viagem nasce.
  *
- * Composição:
- *  - Bloco texto à esquerda: três etapas em grid vertical, numeração mono.
- *  - Foto âncora à direita (pause-pool-book), vertical 2:3, ofset baixo.
- *
- * Doutrina:
- *  - Sem ícones. Sem cards.
- *  - Numeração editorial Low Tide, não numeração de checkout.
- *  - Reveal pontual no headline. Etapas entram com stagger sutil de opacity.
+ * FASE D: aderiu ao sistema de reveals com stagger.
+ *  - Container externo orquestra: rótulo → headline (linhas) → corpo etapas
+ *    (sub-stagger por etapa) → imagem placeholder → caption.
  */
 
 const ETAPAS = [
@@ -44,9 +48,18 @@ export function Metodo() {
       id="metodo"
       className="relative bg-bg px-6 py-28 text-text md:px-10 md:py-40"
     >
-      <div className="mx-auto grid max-w-[1280px] grid-cols-12 gap-x-6 gap-y-14 md:gap-y-20">
+      <motion.div
+        initial="hidden"
+        whileInView="show"
+        viewport={revealViewport}
+        variants={revealContainer}
+        className="mx-auto grid max-w-[1280px] grid-cols-12 gap-x-6 gap-y-14 md:gap-y-20"
+      >
         {/* Editorial label + divisor */}
-        <div className="col-span-12 flex items-baseline gap-4">
+        <motion.div
+          variants={revealItem}
+          className="col-span-12 flex items-baseline gap-4"
+        >
           <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-muted">
             04 — Método
           </span>
@@ -54,36 +67,33 @@ export function Metodo() {
           <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-text/40">
             (como)
           </span>
-        </div>
+        </motion.div>
 
         {/* Headline + etapas — coluna esquerda, larga */}
         <div className="col-span-12 md:col-start-1 md:col-span-7 lg:col-start-2 lg:col-span-7">
           <motion.h2
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true, margin: "-15%" }}
-            transition={{ duration: 0.6, ease: [0.22, 0.61, 0.36, 1] }}
+            variants={revealLineContainer}
             className="font-display text-[clamp(48px,8vw,104px)] font-light uppercase leading-[0.86] tracking-[-0.038em] text-text"
           >
-            Três
-            <br />
-            <span className="italic font-light normal-case tracking-[-0.025em]">
+            <motion.span variants={revealLine} className="block">
+              Três
+            </motion.span>
+            <motion.span
+              variants={revealLine}
+              className="block italic font-light normal-case tracking-[-0.025em]"
+            >
               tempos.
-            </span>
+            </motion.span>
           </motion.h2>
 
-          <div className="mt-14 grid gap-12 md:mt-20 md:gap-16">
-            {ETAPAS.map((etapa, i) => (
+          <motion.div
+            variants={revealContainer}
+            className="mt-14 grid gap-12 md:mt-20 md:gap-16"
+          >
+            {ETAPAS.map((etapa) => (
               <motion.div
                 key={etapa.n}
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-10%" }}
-                transition={{
-                  duration: 0.7,
-                  ease: [0.22, 0.61, 0.36, 1],
-                  delay: i * 0.12,
-                }}
+                variants={revealItem}
                 className="grid grid-cols-12 items-baseline gap-x-6 border-t border-line pt-8"
               >
                 <span className="col-span-2 font-mono text-[11px] uppercase tracking-[0.18em] text-text-muted">
@@ -99,13 +109,14 @@ export function Metodo() {
                 </div>
               </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
 
         {/* Foto — coluna direita, vertical, ofset baixo.
            Placeholder atmosférico dark até novo ativo chegar. */}
         <div className="col-span-12 md:col-start-9 md:col-span-4 md:mt-32 lg:col-start-10 lg:col-span-3 lg:mt-48">
-          <div
+          <motion.div
+            variants={revealImage}
             aria-hidden
             className="relative aspect-[2/3] w-full overflow-hidden bg-bg-deep"
           >
@@ -117,12 +128,15 @@ export function Metodo() {
                   "radial-gradient(ellipse at 50% 30%, rgba(122,90,46,0.18) 0%, transparent 60%)",
               }}
             />
-          </div>
-          <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.16em] text-text-muted">
+          </motion.div>
+          <motion.p
+            variants={revealCaption}
+            className="mt-3 font-mono text-[10px] uppercase tracking-[0.16em] text-text-muted"
+          >
             (método · arquivo pendente)
-          </p>
+          </motion.p>
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 }

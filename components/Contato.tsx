@@ -4,6 +4,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState, type FormEvent } from "react";
 import { UnderlineLink } from "./UnderlineLink";
 import { Logo } from "./Logo";
+import {
+  revealContainer,
+  revealItem,
+  revealLine,
+  revealLineContainer,
+  revealViewport,
+} from "@/lib/motion";
 
 /**
  * Seção 07 — Contato.
@@ -15,8 +22,11 @@ import { Logo } from "./Logo";
  *  - Form curto (nome, e-mail, mensagem) na coluna central, larga.
  *  - WhatsApp + endereço editorial no rodapé.
  *
- * Form: front-end only. Submit faz fade-out do form, mostra estado de
- * sucesso editorial. Sem backend ainda.
+ * FASE D — sistema de reveals com stagger:
+ *  - Container orquestra: rótulo → headline (linhas) → form/aside.
+ *  - Form em si NÃO entra em stagger interno (todos campos juntos como bloco)
+ *    para não criar latência percebida — o foco é a clareza, não a
+ *    coreografia.
  */
 
 const WHATSAPP_URL = "https://wa.me/5548999999999"; // placeholder — trocar quando confirmado
@@ -34,9 +44,18 @@ export function Contato() {
       id="contato"
       className="relative bg-bg px-6 pt-28 pb-12 text-text md:px-10 md:pt-40 md:pb-16"
     >
-      <div className="mx-auto grid max-w-[1280px] grid-cols-12 gap-x-6 gap-y-14 md:gap-y-20">
+      <motion.div
+        initial="hidden"
+        whileInView="show"
+        viewport={revealViewport}
+        variants={revealContainer}
+        className="mx-auto grid max-w-[1280px] grid-cols-12 gap-x-6 gap-y-14 md:gap-y-20"
+      >
         {/* Editorial label + divisor */}
-        <div className="col-span-12 flex items-baseline gap-4">
+        <motion.div
+          variants={revealItem}
+          className="col-span-12 flex items-baseline gap-4"
+        >
           <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-muted">
             07 — Contato
           </span>
@@ -44,27 +63,31 @@ export function Contato() {
           <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-text/40">
             (começo)
           </span>
-        </div>
+        </motion.div>
 
         {/* Headline display */}
         <div className="col-span-12 md:col-start-1 md:col-span-9 lg:col-start-2 lg:col-span-9">
           <motion.h2
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true, margin: "-15%" }}
-            transition={{ duration: 0.6, ease: [0.22, 0.61, 0.36, 1] }}
+            variants={revealLineContainer}
             className="font-display text-[clamp(48px,8vw,108px)] font-light uppercase leading-[0.86] tracking-[-0.038em] text-text"
           >
-            Conversemos
-            <br />
-            <span className="italic font-light normal-case tracking-[-0.025em]">
+            <motion.span variants={revealLine} className="block">
+              Conversemos
+            </motion.span>
+            <motion.span
+              variants={revealLine}
+              className="block italic font-light normal-case tracking-[-0.025em]"
+            >
               antes da viagem.
-            </span>
+            </motion.span>
           </motion.h2>
         </div>
 
         {/* Form — coluna central larga */}
-        <div className="col-span-12 md:col-start-1 md:col-span-8 lg:col-start-2 lg:col-span-7">
+        <motion.div
+          variants={revealItem}
+          className="col-span-12 md:col-start-1 md:col-span-8 lg:col-start-2 lg:col-span-7"
+        >
           <AnimatePresence mode="wait">
             {!submitted ? (
               <motion.form
@@ -136,10 +159,13 @@ export function Contato() {
               </motion.div>
             )}
           </AnimatePresence>
-        </div>
+        </motion.div>
 
         {/* WhatsApp aside — direita */}
-        <div className="col-span-12 md:col-start-9 md:col-span-4 lg:col-start-10 lg:col-span-3">
+        <motion.div
+          variants={revealItem}
+          className="col-span-12 md:col-start-9 md:col-span-4 lg:col-start-10 lg:col-span-3"
+        >
           <div className="space-y-4 border-t border-line pt-8">
             <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-muted">
               (atalho)
@@ -155,25 +181,37 @@ export function Contato() {
               Para conversa direta. Resposta em fuso de Florianópolis.
             </p>
           </div>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
 
       {/* Rodapé editorial — assinatura final, layout 2 colunas */}
-      <div className="mx-auto mt-32 grid max-w-[1280px] grid-cols-12 items-end gap-x-6 gap-y-8 border-t border-line pt-10 md:mt-44">
+      <motion.div
+        initial="hidden"
+        whileInView="show"
+        viewport={revealViewport}
+        variants={revealContainer}
+        className="mx-auto mt-32 grid max-w-[1280px] grid-cols-12 items-end gap-x-6 gap-y-8 border-t border-line pt-10 md:mt-44"
+      >
         {/* Logo + endereço — esquerda */}
-        <div className="col-span-12 md:col-span-6 lg:col-start-2 lg:col-span-5">
+        <motion.div
+          variants={revealItem}
+          className="col-span-12 md:col-span-6 lg:col-start-2 lg:col-span-5"
+        >
           <Logo tone="dark" height={52} className="mb-4" />
           <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-muted">
             Florianópolis — Mundo
           </p>
-        </div>
+        </motion.div>
         {/* Créditos — direita */}
-        <div className="col-span-12 md:col-span-6 md:text-right lg:col-start-7 lg:col-span-5">
+        <motion.div
+          variants={revealItem}
+          className="col-span-12 md:col-span-6 md:text-right lg:col-start-7 lg:col-span-5"
+        >
           <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-muted">
             © 2026 Fa.Away · Flávia Werneck
           </p>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     </section>
   );
 }

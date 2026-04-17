@@ -2,6 +2,15 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
+import {
+  revealCaption,
+  revealContainer,
+  revealImage,
+  revealItem,
+  revealLine,
+  revealLineContainer,
+  revealViewport,
+} from "@/lib/motion";
 
 /**
  * Seção 06 — O que faz uma viagem Fa.Away.
@@ -12,12 +21,11 @@ import { motion } from "framer-motion";
  *  - Atributo 02: foto à esquerda (offset baixo), texto à direita.
  *  - Atributo 03: foto centralizada e menor, texto abaixo curto.
  *
- * Spec B (motion):
- *  - Foto: scale 1.08 → 1.0 spring (stiffness 120, damping 55, mass 1, ~1s)
- *    quando entra no viewport.
- *  - Texto: delay 0.3s sobre a foto, y: 40 → 0, opacity 0 → 1, 0.8s,
- *    ease cubic-bezier(0.22, 0.61, 0.36, 1).
- *  - Cada atributo dispara independente via whileInView (once: true).
+ * FASE D — sistema de reveals com stagger:
+ *  - Cada atributo é um container independente com viewport individual.
+ *  - Ordem dentro do bloco: imagem (scale 1.04 → 1.0) e texto orquestrados
+ *    por revealContainer (label → headline → body).
+ *  - Headline introdutório usa stagger linha-a-linha.
  *
  * Atributos 01 (Tempo) e 02 (Acesso) integram fotos editoriais (Pinterest
  * scrape, baixa-res). Para respeitar o critério 2x retina, os spans de
@@ -27,19 +35,6 @@ import { motion } from "framer-motion";
  *            borderline aceito (gesto contemplativo carrega o quadro).
  * Atributo 03 (Presença) mantém vídeo amanhecer-canoa.
  */
-
-const PHOTO_SPRING = {
-  type: "spring" as const,
-  stiffness: 120,
-  damping: 55,
-  mass: 1,
-};
-const TEXT_TRANSITION = {
-  duration: 0.8,
-  ease: [0.22, 0.61, 0.36, 1] as const,
-  delay: 0.3,
-};
-const VIEWPORT = { once: true, margin: "-12%" };
 
 const ATRIBUTOS = [
   {
@@ -62,7 +57,7 @@ const ATRIBUTOS = [
   },
 ] as const;
 
-/** Bloco de imagem com scale spring em scroll. Aceita src ou null (placeholder). */
+/** Bloco de imagem com reveal scale + opacity. Aceita src ou null (placeholder). */
 function PhotoFrame({
   src,
   alt,
@@ -75,14 +70,9 @@ function PhotoFrame({
   caption: string;
 }) {
   return (
-    <motion.div
-      initial={{ scale: 1.08 }}
-      whileInView={{ scale: 1 }}
-      viewport={VIEWPORT}
-      transition={PHOTO_SPRING}
-      className="origin-center"
-    >
-      <div
+    <>
+      <motion.div
+        variants={revealImage}
         className="relative w-full overflow-hidden bg-bg-deep"
         style={{ aspectRatio: aspect }}
       >
@@ -106,19 +96,20 @@ function PhotoFrame({
             }}
           />
         )}
-      </div>
-      <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.16em] text-text-muted">
+      </motion.div>
+      <motion.p
+        variants={revealCaption}
+        className="mt-3 font-mono text-[10px] uppercase tracking-[0.16em] text-text-muted"
+      >
         {caption}
-      </p>
-    </motion.div>
+      </motion.p>
+    </>
   );
 }
 
 /**
  * VideoFrame — mesma mecânica visual do PhotoFrame, mas com <video> em loop.
  * autoplay + loop + muted + playsInline + preload metadata + sem controles.
- * O scale spring de entrada continua igual (1.08 → 1.0); depois disso o
- * loop nativo assume e nada anima sobre ele.
  */
 function VideoFrame({
   src,
@@ -132,14 +123,9 @@ function VideoFrame({
   caption: string;
 }) {
   return (
-    <motion.div
-      initial={{ scale: 1.08 }}
-      whileInView={{ scale: 1 }}
-      viewport={VIEWPORT}
-      transition={PHOTO_SPRING}
-      className="origin-center"
-    >
-      <div
+    <>
+      <motion.div
+        variants={revealImage}
         className="relative w-full overflow-hidden bg-bg-deep"
         style={{ aspectRatio: aspect }}
       >
@@ -154,15 +140,18 @@ function VideoFrame({
         >
           <source src={src} type="video/mp4" />
         </video>
-      </div>
-      <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.16em] text-text-muted">
+      </motion.div>
+      <motion.p
+        variants={revealCaption}
+        className="mt-3 font-mono text-[10px] uppercase tracking-[0.16em] text-text-muted"
+      >
         {caption}
-      </p>
-    </motion.div>
+      </motion.p>
+    </>
   );
 }
 
-/** Bloco de texto com rise + fade, delay sobre a foto. */
+/** Bloco de texto com reveal item (rise + fade), orquestrado pelo container. */
 function AtributoTexto({
   n,
   titulo,
@@ -173,22 +162,25 @@ function AtributoTexto({
   corpo: string;
 }) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 40 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={VIEWPORT}
-      transition={TEXT_TRANSITION}
-      className="space-y-5"
-    >
-      <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-text-muted">
+    <motion.div variants={revealContainer} className="space-y-5">
+      <motion.span
+        variants={revealItem}
+        className="block font-mono text-[11px] uppercase tracking-[0.18em] text-text-muted"
+      >
         {n}
-      </span>
-      <h3 className="font-display text-[clamp(36px,5vw,64px)] font-light uppercase leading-[0.92] tracking-[-0.03em] text-text">
+      </motion.span>
+      <motion.h3
+        variants={revealItem}
+        className="font-display text-[clamp(36px,5vw,64px)] font-light uppercase leading-[0.92] tracking-[-0.03em] text-text"
+      >
         {titulo}
-      </h3>
-      <p className="max-w-[420px] font-body text-[15px] font-light leading-[1.62] text-text md:text-[16px]">
+      </motion.h3>
+      <motion.p
+        variants={revealItem}
+        className="max-w-[420px] font-body text-[15px] font-light leading-[1.62] text-text md:text-[16px]"
+      >
         {corpo}
-      </p>
+      </motion.p>
     </motion.div>
   );
 }
@@ -201,33 +193,54 @@ export function ViagemFaAway() {
     >
       <div className="mx-auto max-w-[1280px]">
         {/* Editorial label + divisor */}
-        <div className="mb-20 flex items-baseline gap-4 md:mb-28">
-          <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-muted">
-            06 — Viagem Fa.Away
-          </span>
-          <span aria-hidden className="h-px flex-1 bg-line" />
-          <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-text/40">
-            (o que faz)
-          </span>
-        </div>
+        <motion.div
+          initial="hidden"
+          whileInView="show"
+          viewport={revealViewport}
+          variants={revealContainer}
+          className="mb-20 md:mb-28"
+        >
+          <motion.div
+            variants={revealItem}
+            className="flex items-baseline gap-4"
+          >
+            <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-muted">
+              06 — Viagem Fa.Away
+            </span>
+            <span aria-hidden className="h-px flex-1 bg-line" />
+            <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-text/40">
+              (o que faz)
+            </span>
+          </motion.div>
+        </motion.div>
 
-        {/* Headline introdutório */}
+        {/* Headline introdutório — stagger linha-a-linha */}
         <motion.h2
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true, margin: "-15%" }}
-          transition={{ duration: 0.6, ease: [0.22, 0.61, 0.36, 1] }}
+          initial="hidden"
+          whileInView="show"
+          viewport={revealViewport}
+          variants={revealLineContainer}
           className="mb-32 max-w-[780px] font-display text-[clamp(40px,6.5vw,84px)] font-light uppercase leading-[0.92] tracking-[-0.035em] text-text md:mb-44"
         >
-          O que faz
-          <br />
-          <span className="italic font-light normal-case tracking-[-0.025em]">
+          <motion.span variants={revealLine} className="block">
+            O que faz
+          </motion.span>
+          <motion.span
+            variants={revealLine}
+            className="block italic font-light normal-case tracking-[-0.025em]"
+          >
             uma viagem nossa.
-          </span>
+          </motion.span>
         </motion.h2>
 
         {/* Atributo 01 — foto à direita (offset alto), texto à esquerda */}
-        <div className="mb-32 grid grid-cols-12 gap-x-6 gap-y-10 md:mb-44">
+        <motion.div
+          initial="hidden"
+          whileInView="show"
+          viewport={revealViewport}
+          variants={revealContainer}
+          className="mb-32 grid grid-cols-12 gap-x-6 gap-y-10 md:mb-44"
+        >
           <div className="col-span-12 md:col-start-1 md:col-span-5 md:mt-32 lg:col-start-2 lg:col-span-4 lg:mt-40">
             <AtributoTexto {...ATRIBUTOS[0]} />
           </div>
@@ -239,10 +252,16 @@ export function ViagemFaAway() {
               caption="(tempo · pausa)"
             />
           </div>
-        </div>
+        </motion.div>
 
         {/* Atributo 02 — foto à esquerda (offset baixo), texto à direita */}
-        <div className="mb-32 grid grid-cols-12 gap-x-6 gap-y-10 md:mb-44">
+        <motion.div
+          initial="hidden"
+          whileInView="show"
+          viewport={revealViewport}
+          variants={revealContainer}
+          className="mb-32 grid grid-cols-12 gap-x-6 gap-y-10 md:mb-44"
+        >
           <div className="col-span-12 md:col-start-1 md:col-span-5 lg:col-start-2 lg:col-span-3">
             <PhotoFrame
               src="/photos/viagem-02-acesso.png"
@@ -254,10 +273,16 @@ export function ViagemFaAway() {
           <div className="col-span-12 md:col-start-7 md:col-span-6 md:mt-48 lg:col-start-7 lg:col-span-5 lg:mt-56">
             <AtributoTexto {...ATRIBUTOS[1]} />
           </div>
-        </div>
+        </motion.div>
 
         {/* Atributo 03 — vídeo centralizado menor, texto abaixo */}
-        <div className="grid grid-cols-12 gap-x-6 gap-y-8">
+        <motion.div
+          initial="hidden"
+          whileInView="show"
+          viewport={revealViewport}
+          variants={revealContainer}
+          className="grid grid-cols-12 gap-x-6 gap-y-8"
+        >
           <div className="col-span-12 md:col-start-4 md:col-span-6 lg:col-start-5 lg:col-span-4">
             <VideoFrame
               src="/videos/presenca-dawn-canoe.mp4"
@@ -269,7 +294,7 @@ export function ViagemFaAway() {
           <div className="col-span-12 md:col-start-4 md:col-span-6 lg:col-start-5 lg:col-span-4">
             <AtributoTexto {...ATRIBUTOS[2]} />
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

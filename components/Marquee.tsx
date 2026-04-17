@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { animate, motion, useMotionValue, useAnimationFrame } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
+import { revealItem, revealViewport } from "@/lib/motion";
 
 /**
  * Marquee atmosférico — entre seções 04 e 05.
@@ -81,13 +82,21 @@ export function Marquee() {
       onMouseLeave={() => animate(speed, 1, { duration: 0.8, ease: [0.4, 0, 0.2, 1] })}
       className="relative w-full overflow-hidden bg-[#EDE7DC] py-10 md:py-14"
     >
-      {/* Linha editorial superior — micro-rótulo Low Tide */}
-      <div className="mx-auto mb-8 flex max-w-[1280px] items-baseline gap-4 px-6 md:mb-10 md:px-10">
+      {/* Linha editorial superior — micro-rótulo Low Tide.
+          Rótulo recebe reveal sutil; o trilho de fotos NÃO entra em stagger
+          porque já carrega motion contínuo próprio. */}
+      <motion.div
+        initial="hidden"
+        whileInView="show"
+        viewport={revealViewport}
+        variants={revealItem}
+        className="mx-auto mb-8 flex max-w-[1280px] items-baseline gap-4 px-6 md:mb-10 md:px-10"
+      >
         <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-muted">
           (passagem)
         </span>
         <span aria-hidden className="h-px flex-1 bg-line" />
-      </div>
+      </motion.div>
 
       <motion.div
         style={{ x }}
