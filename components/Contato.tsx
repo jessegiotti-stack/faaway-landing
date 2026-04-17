@@ -128,7 +128,7 @@ export function Contato() {
                 <div className="pt-4">
                   <button
                     type="submit"
-                    className="group relative inline-flex items-baseline font-display text-[28px] font-light uppercase leading-none tracking-[-0.02em] text-text transition-opacity hover:opacity-70 md:text-[36px]"
+                    className="group relative inline-flex items-baseline font-display text-[28px] font-light uppercase leading-none tracking-[-0.02em] text-text transition-opacity hover:opacity-70 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-current md:text-[36px]"
                   >
                     <span className="relative">
                       Enviar

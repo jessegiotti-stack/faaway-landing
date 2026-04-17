@@ -31,6 +31,17 @@ export function Nav() {
     return () => window.removeEventListener("hashchange", handle);
   }, []);
 
+  // Escape fecha o painel quando aberto — UX de teclado esperada.
+  // Listener montado apenas quando open=true para não poluir o event loop.
+  useEffect(() => {
+    if (!open) return;
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(false);
+    };
+    window.addEventListener("keydown", handleEsc);
+    return () => window.removeEventListener("keydown", handleEsc);
+  }, [open]);
+
   return (
     <>
       <motion.header
@@ -47,7 +58,7 @@ export function Nav() {
         <button
           type="button"
           onClick={() => setOpen((v) => !v)}
-          className="font-mono text-[11px] uppercase tracking-[0.14em] text-bg mix-blend-difference"
+          className="font-mono text-[11px] uppercase tracking-[0.14em] text-bg mix-blend-difference focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-current"
           aria-expanded={open}
           aria-controls="nav-panel"
         >
