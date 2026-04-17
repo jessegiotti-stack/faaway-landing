@@ -17,14 +17,25 @@ import { useRef, type ReactNode } from "react";
  *  - Vertical only. Sem scale, sem rotation, sem horizontal.
  *  - will-change: transform (preventivo para repaint barato).
  *
+ * Estrutura:
+ *   <div ref> position relative + tamanho 100% → useScroll lê offset confiável
+ *     <div absolute over-renderizado>
+ *       <motion.div absolute inset-0 com y/transform>
+ *         {children}
+ *       </motion.div>
+ *     </div>
+ *   </div>
+ *
+ * O ref ficar em um wrapper RELATIVO (não absoluto) é exigência do
+ * useScroll — caso contrário a Framer emite warning sobre cálculo de
+ * offset não confiável.
+ *
  * Uso esperado:
  *   <div className="relative aspect-[4/5] overflow-hidden bg-bg-deep">
  *     <Parallax intensity={8}>
  *       <Image fill ... />
  *     </Parallax>
  *   </div>
- *
- * O frame externo PRECISA ter overflow-hidden e position relative.
  */
 export function Parallax({
   intensity = 6,
@@ -59,17 +70,18 @@ export function Parallax({
   const overshootHeight = `${100 + intensity * 2}%`;
 
   return (
-    <div
-      ref={ref}
-      className="pointer-events-none absolute inset-x-0"
-      style={{ top: overshootTop, height: overshootHeight }}
-    >
-      <motion.div
-        style={{ y, willChange: "transform" }}
-        className="pointer-events-auto absolute inset-0"
+    <div ref={ref} className="absolute inset-0">
+      <div
+        className="pointer-events-none absolute inset-x-0"
+        style={{ top: overshootTop, height: overshootHeight }}
       >
-        {children}
-      </motion.div>
+        <motion.div
+          style={{ y, willChange: "transform" }}
+          className="pointer-events-auto absolute inset-0"
+        >
+          {children}
+        </motion.div>
+      </div>
     </div>
   );
 }
