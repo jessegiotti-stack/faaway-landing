@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Fraunces, Inter_Tight, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { LenisProvider } from "@/components/LenisProvider";
+import { MotionRoot } from "@/components/MotionRoot";
 
 /**
  * Tipografia (primeira execução — ver direction-faaway.md):
@@ -57,7 +58,9 @@ export default function RootLayout({
       className={`${fraunces.variable} ${interTight.variable} ${jetbrainsMono.variable}`}
     >
       <body className="min-h-svh bg-bg text-text antialiased">
-        <LenisProvider>{children}</LenisProvider>
+        <MotionRoot>
+          <LenisProvider>{children}</LenisProvider>
+        </MotionRoot>
       </body>
     </html>
   );

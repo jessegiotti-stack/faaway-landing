@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { springs, heroDelays } from "@/lib/motion";
 import { UnderlineLink } from "./UnderlineLink";
@@ -44,21 +44,24 @@ export function Hero() {
   const [index, setIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
   const [rotationArmed, setRotationArmed] = useState(false);
+  const reduce = useReducedMotion();
 
   // Aguarda a timeline Futrue inicial completar antes de armar a rotação.
+  // Sob prefers-reduced-motion: nunca arma — fica apenas no primeiro quadro.
   useEffect(() => {
+    if (reduce) return;
     const t = setTimeout(() => setRotationArmed(true), INITIAL_DELAY_MS);
     return () => clearTimeout(t);
-  }, []);
+  }, [reduce]);
 
-  // Loop de rotação. Pausado enquanto isHovered.
+  // Loop de rotação. Pausado enquanto isHovered ou sob reduced-motion.
   useEffect(() => {
-    if (!rotationArmed || isHovered) return;
+    if (reduce || !rotationArmed || isHovered) return;
     const id = setInterval(() => {
       setIndex((i) => (i + 1) % HERO_GALLERY.length);
     }, ROTATION_INTERVAL_MS);
     return () => clearInterval(id);
-  }, [rotationArmed, isHovered]);
+  }, [reduce, rotationArmed, isHovered]);
 
   const isFirstFrame = index === 0;
 

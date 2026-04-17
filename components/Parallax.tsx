@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
 import { useRef, type ReactNode } from "react";
 
 /**
@@ -35,6 +35,7 @@ export function Parallax({
   children: ReactNode;
 }) {
   const ref = useRef<HTMLDivElement>(null);
+  const reduce = useReducedMotion();
 
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -46,6 +47,12 @@ export function Parallax({
     [0, 1],
     [`${intensity}%`, `-${intensity}%`]
   );
+
+  // a11y: prefers-reduced-motion → renderizar sem o wrapper de over-render,
+  // sem useScroll consumindo rAF. A imagem fill ocupa o frame original.
+  if (reduce) {
+    return <>{children}</>;
+  }
 
   // Container over-renderizado + ancorado, garantindo headroom para o translate.
   const overshootTop = `-${intensity}%`;

@@ -81,3 +81,23 @@ html.lenis body {
 .lenis.lenis-stopped {
   overflow: clip;
 }
+
+/* ============================================================
+   FASE D — prefers-reduced-motion
+   ============================================================
+   Para usuários que pediram menos movimento (a11y), neutralizar
+   transitions e animations CSS no nível global. Hovers continuam
+   funcionando, mas instantâneos. Combinado com:
+   - MotionConfig reducedMotion="user" (Framer: descarta transforms)
+   - useReducedMotion() em Parallax/Hero/Marquee/Lenis (desliga rAF)
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

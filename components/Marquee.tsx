@@ -1,7 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import { animate, motion, useMotionValue, useAnimationFrame } from "framer-motion";
+import {
+  animate,
+  motion,
+  useMotionValue,
+  useAnimationFrame,
+  useReducedMotion,
+} from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { revealItem, revealViewport } from "@/lib/motion";
 
@@ -53,6 +59,7 @@ export function Marquee() {
   const speed = useMotionValue(1);
   const [, setReady] = useState(false);
   const mountedRef = useRef(false);
+  const reduce = useReducedMotion();
 
   // Garantir que useAnimationFrame só roda client-side.
   useEffect(() => {
@@ -64,7 +71,7 @@ export function Marquee() {
   }, []);
 
   useAnimationFrame((_t, delta) => {
-    if (!mountedRef.current) return;
+    if (!mountedRef.current || reduce) return;
     const dx = (delta / 1000) * PIXELS_PER_SECOND * speed.get();
     let next = x.get() - dx;
     // Reset suave quando completou uma metade — o quadro final
@@ -78,8 +85,12 @@ export function Marquee() {
   return (
     <section
       aria-hidden
-      onMouseEnter={() => animate(speed, 0, { duration: 0.8, ease: [0.4, 0, 0.2, 1] })}
-      onMouseLeave={() => animate(speed, 1, { duration: 0.8, ease: [0.4, 0, 0.2, 1] })}
+      onMouseEnter={() => {
+        if (!reduce) animate(speed, 0, { duration: 0.8, ease: [0.4, 0, 0.2, 1] });
+      }}
+      onMouseLeave={() => {
+        if (!reduce) animate(speed, 1, { duration: 0.8, ease: [0.4, 0, 0.2, 1] });
+      }}
       className="relative w-full overflow-hidden bg-[#EDE7DC] py-10 md:py-14"
     >
       {/* Linha editorial superior — micro-rótulo Low Tide.
