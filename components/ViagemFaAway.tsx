@@ -11,6 +11,7 @@ import {
   revealLineContainer,
   revealViewport,
 } from "@/lib/motion";
+import { Parallax } from "./Parallax";
 
 /**
  * Seção 06 — O que faz uma viagem Fa.Away.
@@ -57,18 +58,44 @@ const ATRIBUTOS = [
   },
 ] as const;
 
-/** Bloco de imagem com reveal scale + opacity. Aceita src ou null (placeholder). */
+/**
+ * Bloco de imagem com reveal scale + opacity. Aceita src ou null (placeholder).
+ * Se `parallax` for número > 0, envelopa a imagem em <Parallax intensity={..}>.
+ */
 function PhotoFrame({
   src,
   alt,
   aspect,
   caption,
+  parallax = 0,
 }: {
   src: string | null;
   alt: string;
   aspect: string;
   caption: string;
+  parallax?: number;
 }) {
+  const img = src ? (
+    <Image
+      src={src}
+      alt={alt}
+      fill
+      sizes="(min-width: 1024px) 25vw, (min-width: 768px) 40vw, 100vw"
+      quality={90}
+      className="object-cover"
+    />
+  ) : (
+    // Placeholder atmosférico — penumbra âmbar sutil
+    <div
+      aria-hidden
+      className="absolute inset-0"
+      style={{
+        background:
+          "radial-gradient(ellipse at 50% 35%, rgba(122,90,46,0.18) 0%, transparent 60%)",
+      }}
+    />
+  );
+
   return (
     <>
       <motion.div
@@ -76,26 +103,7 @@ function PhotoFrame({
         className="relative w-full overflow-hidden bg-bg-deep"
         style={{ aspectRatio: aspect }}
       >
-        {src ? (
-          <Image
-            src={src}
-            alt={alt}
-            fill
-            sizes="(min-width: 1024px) 25vw, (min-width: 768px) 40vw, 100vw"
-            quality={90}
-            className="object-cover"
-          />
-        ) : (
-          // Placeholder atmosférico — penumbra âmbar sutil
-          <div
-            aria-hidden
-            className="absolute inset-0"
-            style={{
-              background:
-                "radial-gradient(ellipse at 50% 35%, rgba(122,90,46,0.18) 0%, transparent 60%)",
-            }}
-          />
-        )}
+        {parallax > 0 ? <Parallax intensity={parallax}>{img}</Parallax> : img}
       </motion.div>
       <motion.p
         variants={revealCaption}
@@ -250,6 +258,7 @@ export function ViagemFaAway() {
               alt=""
               aspect="4 / 5"
               caption="(tempo · pausa)"
+              parallax={6}
             />
           </div>
         </motion.div>
@@ -268,6 +277,7 @@ export function ViagemFaAway() {
               alt=""
               aspect="4 / 5"
               caption="(acesso · gesto)"
+              parallax={6}
             />
           </div>
           <div className="col-span-12 md:col-start-7 md:col-span-6 md:mt-48 lg:col-start-7 lg:col-span-5 lg:mt-56">

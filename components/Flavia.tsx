@@ -11,6 +11,7 @@ import {
   revealLineContainer,
   revealViewport,
 } from "@/lib/motion";
+import { Parallax } from "./Parallax";
 
 /**
  * Seção 03 — Flávia.
@@ -55,14 +56,16 @@ export function Flavia() {
             variants={revealImage}
             className="relative aspect-[4/5] w-full overflow-hidden bg-bg-deep"
           >
-            <Image
-              src="/photos/portrait-flavia.jpg"
-              alt="Retrato de Flávia Werneck"
-              fill
-              sizes="(min-width: 1024px) 33vw, (min-width: 768px) 42vw, 100vw"
-              quality={92}
-              className="object-cover"
-            />
+            <Parallax intensity={8}>
+              <Image
+                src="/photos/portrait-flavia.jpg"
+                alt="Retrato de Flávia Werneck"
+                fill
+                sizes="(min-width: 1024px) 33vw, (min-width: 768px) 42vw, 100vw"
+                quality={92}
+                className="object-cover"
+              />
+            </Parallax>
           </motion.div>
           <motion.p
             variants={revealCaption}
