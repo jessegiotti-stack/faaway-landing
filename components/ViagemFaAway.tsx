@@ -306,10 +306,10 @@ export function ViagemFaAway() {
           </div>
           <div className="col-span-12 md:col-start-8 md:col-span-5 lg:col-start-9 lg:col-span-3">
             <PhotoFrame
-              src="/photos/viagem-01-tempo.png"
+              src="/photos/viagem-01-tempo-entardecer.png"
               alt=""
               aspect="4 / 5"
-              caption="(tempo · pausa)"
+              caption="(tempo · entardecer)"
               parallax={6}
             />
           </div>
