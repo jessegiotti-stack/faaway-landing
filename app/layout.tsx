@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { Fraunces, Inter_Tight, JetBrains_Mono } from "next/font/google";
-import Script from "next/script";
 import "./globals.css";
 import { LenisProvider } from "@/components/LenisProvider";
 import { MotionRoot } from "@/components/MotionRoot";
+import { TallyScript } from "@/components/TallyScript";
 
 /**
  * Tipografia (primeira execução — ver direction-faaway.md):
@@ -64,11 +64,10 @@ export default function RootLayout({
         </MotionRoot>
         {/* Tally embed — carrega após interação para não competir com LCP.
             Habilita data-tally-open="<formId>" nos botões de CTA (Hero + Contato)
-            que abrem o mesmo popup vGx2xv como modal com overlay. */}
-        <Script
-          src="https://tally.so/widgets/embed.js"
-          strategy="afterInteractive"
-        />
+            que abrem o mesmo popup vGx2xv como modal com overlay.
+            Wrapper client-side chama Tally.loadEmbeds() no onLoad para
+            re-escanear o DOM hidratado — ver components/TallyScript.tsx. */}
+        <TallyScript />
       </body>
     </html>
   );

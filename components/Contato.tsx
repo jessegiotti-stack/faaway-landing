@@ -98,7 +98,7 @@ export function Contato() {
               </span>
               <TallyButton
                 formId="vGx2xv"
-                className="font-display text-[clamp(36px,5.5vw,56px)] font-light uppercase leading-none tracking-[-0.025em] text-text"
+                className="whitespace-nowrap font-display text-[clamp(36px,5.5vw,56px)] font-light uppercase leading-none tracking-[-0.025em] text-text"
               >
                 Agendar conversa →
               </TallyButton>
