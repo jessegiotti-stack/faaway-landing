@@ -127,15 +127,15 @@ export function Metodo() {
         </div>
 
         {/* Foto — coluna direita, vertical, ofset baixo.
-           Janela contemplativa — pedra, sombra, quietude.
-           (curadoria lp_novas: hf_063 — 736×981, retrato 3:4). */}
+           Pausa íntima — livro cobrindo rosto, beira de piscina.
+           Gesto de interrupção deliberada, não de fuga. */}
         <div className="col-span-12 md:col-start-9 md:col-span-4 md:mt-32 lg:col-start-10 lg:col-span-3 lg:mt-48">
           <motion.div
             variants={metodoImageVariants}
             className="relative aspect-[2/3] w-full overflow-hidden bg-bg-deep"
           >
             <Image
-              src="/photos/metodo-janela-pedra.png"
+              src="/photos/metodo-pool-book.png"
               alt=""
               fill
               sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 100vw"
@@ -147,7 +147,7 @@ export function Metodo() {
             variants={revealCaption}
             className="mt-3 font-mono text-[10px] uppercase tracking-[0.16em] text-text-muted"
           >
-            (método · observação)
+            (método · pausa)
           </motion.p>
         </div>
       </motion.div>
