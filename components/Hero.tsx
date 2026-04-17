@@ -5,7 +5,7 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { preload } from "react-dom";
 import { springs, heroDelays } from "@/lib/motion";
-import { UnderlineLink } from "./UnderlineLink";
+import { TallyButton } from "./TallyButton";
 
 /**
  * Hero institucional Fa.Away — galeria atmosférica em rotação.
@@ -237,12 +237,12 @@ export function Hero() {
             <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-bg/60">
               (próximo passo)
             </span>
-            <UnderlineLink
-              href="#contato"
+            <TallyButton
+              formId="vGx2xv"
               className="font-display text-[32px] font-light leading-none tracking-[-0.02em] text-bg md:text-[40px]"
             >
               Agendar conversa →
-            </UnderlineLink>
+            </TallyButton>
           </motion.div>
         </div>
       </div>
