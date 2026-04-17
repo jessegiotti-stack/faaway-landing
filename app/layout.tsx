@@ -34,12 +34,12 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "fa.Away — Consultoria de viagens",
+  title: "Fa.Away — Consultoria de viagens",
   description:
     "Roteiros desenhados para quem entende viagem como autoria. Consultoria boutique de luxo por Flávia Werneck.",
   metadataBase: new URL("https://faaway.com"),
   openGraph: {
-    title: "fa.Away — Consultoria de viagens",
+    title: "Fa.Away — Consultoria de viagens",
     description: "Viagens feitas à mão. Por Flávia Werneck.",
     type: "website",
     locale: "pt_BR",

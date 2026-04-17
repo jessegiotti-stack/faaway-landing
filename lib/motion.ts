@@ -1,7 +1,7 @@
 import type { Transition } from "framer-motion";
 
 /**
- * Spring presets — contrato Futrue para LP fa.Away.
+ * Spring presets — contrato Futrue para LP Fa.Away.
  * Não tunar sem revisar direction-faaway.md (seção Movimento).
  */
 export const springs: Record<string, Transition> = {
