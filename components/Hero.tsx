@@ -30,9 +30,21 @@ import { UnderlineLink } from "./UnderlineLink";
  *    visível como faixa preta no topo/base do hero). Este é o hf_014916,
  *    mesma cena, figura de branco caminhando, sem barras.
  */
+/**
+ * `objectPosition` opcional por frame — desloca o crop dentro do object-cover
+ * quando a composição da imagem alinha o assunto com o eixo do headline e
+ * "briga" por leitura. Hero-02 (mulher flutuando entardecer) tem o rosto
+ * próximo ao centro-vertical da imagem vertical; puxar o enquadramento
+ * para cima (center 30%) deixa mais água no topo e tira o rosto do eixo
+ * do display. Hero-01 e hero-03 mantêm center default.
+ */
 const HERO_GALLERY = [
   { src: "/photos/hero-01-turquoise-deep.png", alt: "" },
-  { src: "/photos/hero-02-suspension-dusk.png", alt: "" },
+  {
+    src: "/photos/hero-02-suspension-dusk.png",
+    alt: "",
+    objectPosition: "center 30%",
+  },
   { src: "/photos/hero-03-greek-alt.png", alt: "" },
 ] as const;
 
@@ -127,6 +139,12 @@ export function Hero() {
               quality={92}
               sizes="100vw"
               className="object-cover"
+              style={{
+                objectPosition:
+                  "objectPosition" in HERO_GALLERY[index]
+                    ? HERO_GALLERY[index].objectPosition
+                    : undefined,
+              }}
             />
           </motion.div>
         </AnimatePresence>
