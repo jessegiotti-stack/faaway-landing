@@ -51,7 +51,7 @@ export function Filosofia() {
             05 — Filosofia
           </span>
           <span aria-hidden className="h-px flex-1 bg-bg/15" />
-          <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-bg/40 transition-colors duration-300 group-hover:text-bg">
+          <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-bg/60 transition-colors duration-300 group-hover:text-bg">
             (por que)
           </span>
         </motion.div>

@@ -267,7 +267,7 @@ export function ViagemFaAway() {
               06 — Viagem Fa.Away
             </span>
             <span aria-hidden className="h-px flex-1 bg-line" />
-            <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-text/40 transition-colors duration-300 group-hover:text-text">
+            <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-text/60 transition-colors duration-300 group-hover:text-text">
               (o que faz)
             </span>
           </motion.div>

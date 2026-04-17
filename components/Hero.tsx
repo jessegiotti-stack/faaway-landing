@@ -252,7 +252,7 @@ export function Hero() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ ...springs.editorial, delay: heroDelays.editorial + 0.1 }}
-        className="absolute bottom-5 left-1/2 z-20 -translate-x-1/2 font-mono text-[9px] uppercase tracking-[0.22em] text-bg/40 md:bottom-7"
+        className="absolute bottom-5 left-1/2 z-20 -translate-x-1/2 font-mono text-[9px] uppercase tracking-[0.22em] text-bg/60 md:bottom-7"
       >
         01 | Belo Horizonte — Mundo
       </motion.div>

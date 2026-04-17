@@ -44,7 +44,7 @@ export function Flavia() {
             03 — Flávia
           </span>
           <span aria-hidden className="h-px flex-1 bg-line" />
-          <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-text/40 transition-colors duration-300 group-hover:text-text">
+          <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-text/60 transition-colors duration-300 group-hover:text-text">
             (quem)
           </span>
         </motion.div>
