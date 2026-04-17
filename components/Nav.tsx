@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { UnderlineLink } from "./UnderlineLink";
+import { Logo } from "./Logo";
 import { springs, heroDelays } from "@/lib/motion";
 
 const NAV_ITEMS = [
@@ -28,14 +29,9 @@ export function Nav() {
         transition={{ ...springs.cta, delay: heroDelays.header }}
         className="fixed inset-x-0 top-0 z-40 flex items-center justify-between px-6 py-5 text-text md:px-10 md:py-7"
       >
-        {/* Wordmark — placeholder até receber SVG dedicado */}
-        <a
-          href="/"
-          className="font-display text-[20px] font-light tracking-[-0.02em] text-bg mix-blend-difference md:text-[22px]"
-          aria-label="fa.Away — início"
-        >
-          fa.<span className="italic">Away</span>
-        </a>
+        {/* Logo oficial — tone light + mix-blend-difference adapta ao
+            que estiver atrás (hero foto, bg claro, bg escuro Filosofia). */}
+        <Logo tone="light" height={36} className="mix-blend-difference" />
 
         {/* Menu trigger */}
         <button
