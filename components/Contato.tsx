@@ -11,6 +11,7 @@ import {
   revealLineContainer,
   revealViewport,
 } from "@/lib/motion";
+import { WHATSAPP } from "@/lib/contact";
 
 /**
  * Seção 07 — Contato.
@@ -29,7 +30,7 @@ import {
  *    coreografia.
  */
 
-const WHATSAPP_URL = "https://wa.me/5548999999999"; // placeholder — trocar quando confirmado
+// Número real da Flávia vive em lib/contact.ts — fonte única de verdade.
 
 export function Contato() {
   const [submitted, setSubmitted] = useState(false);
@@ -171,7 +172,7 @@ export function Contato() {
               (atalho)
             </span>
             <UnderlineLink
-              href={WHATSAPP_URL}
+              href={WHATSAPP.url}
               external
               className="font-display text-[24px] font-light leading-tight tracking-[-0.02em] text-text md:text-[28px]"
             >

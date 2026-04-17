@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { UnderlineLink } from "./UnderlineLink";
 import { Logo } from "./Logo";
 import { springs, heroDelays } from "@/lib/motion";
+import { WHATSAPP } from "@/lib/contact";
 
 const NAV_ITEMS = [
   { num: "01", label: "Manifesto", href: "#manifesto" },
@@ -79,7 +80,7 @@ export function Nav() {
                 Belo Horizonte | MG
               </span>
               <UnderlineLink
-                href="https://wa.me/"
+                href={WHATSAPP.url}
                 external
                 className="font-mono text-[10px] uppercase tracking-[0.18em] text-text"
               >
