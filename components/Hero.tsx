@@ -24,13 +24,15 @@ import { UnderlineLink } from "./UnderlineLink";
  *  - hero-02-suspension-dusk (1152×2048) — mulher flutuando entardecer.
  *    Fonte vertical; object-cover/center recorta topo e base mantendo a
  *    figura central visível.
- *  - hero-03-greek-shaded (2048×1152) — beco grego sombreado, figura de
- *    vestido branco caminhando.
+ *  - hero-03-greek-alt (2048×1152) — beco grego porta azul, plano alternativo
+ *    ao hf_015147 original (que vinha com vinheta cinematográfica baked-in,
+ *    visível como faixa preta no topo/base do hero). Este é o hf_014916,
+ *    mesma cena, figura de branco caminhando, sem barras.
  */
 const HERO_GALLERY = [
   { src: "/photos/hero-01-turquoise-deep.png", alt: "" },
   { src: "/photos/hero-02-suspension-dusk.png", alt: "" },
-  { src: "/photos/hero-03-greek-shaded.png", alt: "" },
+  { src: "/photos/hero-03-greek-alt.png", alt: "" },
 ] as const;
 
 const ROTATION_INTERVAL_MS = 7000;
