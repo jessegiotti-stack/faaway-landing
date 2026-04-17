@@ -178,7 +178,7 @@ export function Contato() {
               WhatsApp →
             </UnderlineLink>
             <p className="max-w-[260px] font-body text-[13px] font-light leading-[1.55] text-text-muted md:text-[14px]">
-              Para conversa direta. Resposta em fuso de Florianópolis.
+              Para conversa direta. Resposta em fuso de Belo Horizonte.
             </p>
           </div>
         </motion.div>
@@ -199,7 +199,7 @@ export function Contato() {
         >
           <Logo tone="dark" height={52} className="mb-4" />
           <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-muted">
-            Florianópolis — Mundo
+            Belo Horizonte — Mundo
           </p>
         </motion.div>
         {/* Créditos — direita */}

@@ -76,7 +76,7 @@ export function Nav() {
             </ul>
             <div className="mt-9 flex items-center justify-between border-t border-line pt-5">
               <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-text/60">
-                Florianópolis | SC
+                Belo Horizonte | MG
               </span>
               <UnderlineLink
                 href="https://wa.me/"

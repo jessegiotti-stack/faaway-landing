@@ -109,7 +109,7 @@ export function Flavia() {
               virar viagem.
             </p>
             <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-text-muted">
-              Baseada em Florianópolis — opera no mundo.
+              Baseada em Belo Horizonte — opera no mundo.
             </p>
           </motion.div>
         </div>
