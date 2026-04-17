@@ -20,13 +20,15 @@ import { useEffect, useRef, useState } from "react";
  *
  * Curadoria (3 únicas, sem repetição com outras seções):
  *  - marquee-01-greek-bluedoor (2048×1152) — beco grego porta azul.
- *  - hero-03-greek-shaded (2048×1152) — beco grego sombreado.
+ *  - marquee-02-chair-coffee (736×920) — cadeira de praia + dois cafés ao
+ *    mar prateado. Pinterest scrape, baixa res; em 480×300 fica 2x justo
+ *    (necessário 960px nativo, temos 736 — borderline aceito).
  *  - hero-aerial-swimmer (legacy 735×1308) — em 480×300 atende o critério 2x.
  */
 
 const MARQUEE_PHOTOS = [
   { src: "/photos/marquee-01-greek-bluedoor.png", alt: "" },
-  { src: "/photos/hero-03-greek-shaded.png", alt: "" },
+  { src: "/photos/marquee-02-chair-coffee.png", alt: "" },
   { src: "/photos/hero-aerial-swimmer.jpg", alt: "" },
 ] as const;
 
