@@ -125,17 +125,52 @@ export function Hero() {
 
       {/* Conteúdo */}
       <div className="relative z-10 flex h-full flex-col justify-between px-6 pb-12 pt-28 md:px-10 md:pb-16 md:pt-32">
-        {/* Headline display — assimétrico à esquerda, com rise */}
-        <div className="flex flex-1 items-center">
+        {/* Headline display — três linhas editoriais em cascata descendente
+            com deslocamento horizontal escalonado.
+             - Linha 1 (Viagens)      → offset 0
+             - Linha 2 (desenhadas)   → pl-[4%] mobile, pl-[10%] desktop
+             - Linha 3 (à mão. italic)→ pl-[8%] mobile, pl-[22%] desktop
+            Mesma escala tipográfica e line-height nas três. Italic só na
+            última. Entradas com stagger 80ms reforçando a descida
+            (spring headlineRise: y:600→0, stiffness 108, damping 30). */}
+        <div className="flex flex-1 items-center w-full">
           <motion.h1
-            initial={{ y: 600, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ ...springs.headlineRise, delay: heroDelays.headline }}
-            className="font-display text-[clamp(72px,14vw,200px)] font-light uppercase leading-[0.84] tracking-[-0.04em] text-bg"
+            className="font-display text-[clamp(72px,14vw,200px)] font-light uppercase leading-[0.84] tracking-[-0.04em] text-bg w-full"
+            aria-label="Viagens desenhadas à mão"
           >
-            fazer
-            <br />
-            <span className="italic font-light">à mão</span>
+            <motion.span
+              initial={{ y: 600, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{
+                ...springs.headlineRise,
+                delay: heroDelays.headline,
+              }}
+              className="block"
+            >
+              Viagens
+            </motion.span>
+            <motion.span
+              initial={{ y: 600, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{
+                ...springs.headlineRise,
+                delay: heroDelays.headline + 0.08,
+              }}
+              className="block normal-case pl-[4%] md:pl-[10%]"
+            >
+              desenhadas
+            </motion.span>
+            <motion.span
+              initial={{ y: 600, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{
+                ...springs.headlineRise,
+                delay: heroDelays.headline + 0.16,
+              }}
+              className="block italic font-light normal-case pl-[8%] md:pl-[22%]"
+            >
+              à mão.
+            </motion.span>
           </motion.h1>
         </div>
 
