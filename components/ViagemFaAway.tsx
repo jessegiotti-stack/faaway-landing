@@ -19,8 +19,13 @@ import { motion } from "framer-motion";
  *    ease cubic-bezier(0.22, 0.61, 0.36, 1).
  *  - Cada atributo dispara independente via whileInView (once: true).
  *
- * Foto pendente (frame-window-palms) não chegou — atributo 03 fica com
- * placeholder atmosférico escuro até o arquivo ser dropado.
+ * Atributos 01 (Tempo) e 02 (Acesso) integram fotos editoriais (Pinterest
+ * scrape, baixa-res). Para respeitar o critério 2x retina, os spans de
+ * display foram comprimidos:
+ *  - Tempo:  lg:col-span-3 (~320px display) com fonte 736×920 → 2x ok.
+ *  - Acesso: lg:col-span-3 (~320px display) com fonte 612×755 → ~5% short,
+ *            borderline aceito (gesto contemplativo carrega o quadro).
+ * Atributo 03 (Presença) mantém vídeo amanhecer-canoa.
  */
 
 const PHOTO_SPRING = {
@@ -86,7 +91,7 @@ function PhotoFrame({
             src={src}
             alt={alt}
             fill
-            sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+            sizes="(min-width: 1024px) 25vw, (min-width: 768px) 40vw, 100vw"
             quality={90}
             className="object-cover"
           />
@@ -226,27 +231,27 @@ export function ViagemFaAway() {
           <div className="col-span-12 md:col-start-1 md:col-span-5 md:mt-32 lg:col-start-2 lg:col-span-4 lg:mt-40">
             <AtributoTexto {...ATRIBUTOS[0]} />
           </div>
-          <div className="col-span-12 md:col-start-7 md:col-span-6 lg:col-start-8 lg:col-span-4">
+          <div className="col-span-12 md:col-start-8 md:col-span-5 lg:col-start-9 lg:col-span-3">
             <PhotoFrame
-              src={null}
+              src="/photos/viagem-01-tempo.png"
               alt=""
-              aspect="3 / 4"
-              caption="(tempo · arquivo pendente)"
+              aspect="4 / 5"
+              caption="(tempo · pausa)"
             />
           </div>
         </div>
 
         {/* Atributo 02 — foto à esquerda (offset baixo), texto à direita */}
         <div className="mb-32 grid grid-cols-12 gap-x-6 gap-y-10 md:mb-44">
-          <div className="col-span-12 md:col-start-1 md:col-span-6 lg:col-start-2 lg:col-span-5">
+          <div className="col-span-12 md:col-start-1 md:col-span-5 lg:col-start-2 lg:col-span-3">
             <PhotoFrame
-              src={null}
+              src="/photos/viagem-02-acesso.png"
               alt=""
               aspect="4 / 5"
-              caption="(acesso · arquivo pendente)"
+              caption="(acesso · gesto)"
             />
           </div>
-          <div className="col-span-12 md:col-start-8 md:col-span-5 md:mt-48 lg:col-start-8 lg:col-span-4 lg:mt-56">
+          <div className="col-span-12 md:col-start-7 md:col-span-6 md:mt-48 lg:col-start-7 lg:col-span-5 lg:mt-56">
             <AtributoTexto {...ATRIBUTOS[1]} />
           </div>
         </div>
