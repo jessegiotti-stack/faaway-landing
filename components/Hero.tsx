@@ -1,40 +1,122 @@
 "use client";
 
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
+import { useEffect, useState } from "react";
 import { springs, heroDelays } from "@/lib/motion";
 import { UnderlineLink } from "./UnderlineLink";
 
 /**
- * Hero institucional fa.Away.
- * Timeline orquestrada (contrato Futrue, ver direction-faaway.md).
+ * Hero institucional Fa.Away — galeria atmosférica em rotação.
  *
- * Foto background: hero-aerial-swimmer.jpg (aérea, água verde-profunda).
- * Caso ainda não tenha sido dropada em assets/photos/, fica fundo escuro.
+ * Spec A (motion):
+ *  - Primeira imagem (hero-aerial-swimmer) entra com a timeline Futrue intacta:
+ *    scale 1.4 → 1.0, spring 173/65/1, sem delay.
+ *  - Após ~1.8s a rotação automática começa.
+ *  - Crossfade de 1.2s entre imagens + scale spring pontual 1.05 → 1.0
+ *    (stiffness 80, damping 60) — quase imperceptível, só dá presença.
+ *  - 7s de pausa em cada quadro.
+ *  - Pause-on-hover: mouse no hero → para. Sai → retoma.
+ *
+ * Curadoria (lp_novas — alta-resolução, sem retrato, sem repetição):
+ *  - hero-01-turquoise-deep (5504×3072) — aérea mulher nadando em turquesa
+ *    profundo. Entrada com a timeline Futrue intacta.
+ *  - hero-02-suspension-dusk (1152×2048) — mulher flutuando entardecer.
+ *    Fonte vertical; object-cover/center recorta topo e base mantendo a
+ *    figura central visível.
+ *  - hero-03-greek-shaded (2048×1152) — beco grego sombreado, figura de
+ *    vestido branco caminhando.
  */
+const HERO_GALLERY = [
+  { src: "/photos/hero-01-turquoise-deep.png", alt: "" },
+  { src: "/photos/hero-02-suspension-dusk.png", alt: "" },
+  { src: "/photos/hero-03-greek-shaded.png", alt: "" },
+] as const;
+
+const ROTATION_INTERVAL_MS = 7000;
+const INITIAL_DELAY_MS = 1800;
+const CROSSFADE_DURATION_S = 1.2;
+const CROSSFADE_EASE = [0.4, 0, 0.2, 1] as const;
+
 export function Hero() {
+  const [index, setIndex] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
+  const [rotationArmed, setRotationArmed] = useState(false);
+
+  // Aguarda a timeline Futrue inicial completar antes de armar a rotação.
+  useEffect(() => {
+    const t = setTimeout(() => setRotationArmed(true), INITIAL_DELAY_MS);
+    return () => clearTimeout(t);
+  }, []);
+
+  // Loop de rotação. Pausado enquanto isHovered.
+  useEffect(() => {
+    if (!rotationArmed || isHovered) return;
+    const id = setInterval(() => {
+      setIndex((i) => (i + 1) % HERO_GALLERY.length);
+    }, ROTATION_INTERVAL_MS);
+    return () => clearInterval(id);
+  }, [rotationArmed, isHovered]);
+
+  const isFirstFrame = index === 0;
+
   return (
-    <section className="relative h-[100svh] w-full overflow-hidden bg-bg-deep text-bg">
-      {/* Background com scale */}
-      <motion.div
-        initial={{ scale: 1.4 }}
-        animate={{ scale: 1 }}
-        transition={{ ...springs.bgScale, delay: heroDelays.bg }}
-        className="absolute inset-0 z-0"
-      >
-        <Image
-          src="/photos/hero-aerial-swimmer.jpg"
-          alt=""
-          fill
-          priority
-          quality={92}
-          sizes="100vw"
-          className="object-cover"
-          // Se a imagem não existir ainda, next/image vai 404; o fallback fica o bg-bg-deep abaixo
-        />
-        {/* Veil sutil para garantir leitura tipográfica */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/15 via-transparent to-black/40" />
-      </motion.div>
+    <section
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      className="relative h-[100svh] w-full overflow-hidden bg-bg-deep text-bg"
+    >
+      {/* Galeria background — stack absoluto com crossfade */}
+      <div className="absolute inset-0 z-0">
+        <AnimatePresence mode="sync">
+          <motion.div
+            key={index}
+            initial={
+              isFirstFrame
+                ? { scale: 1.4, opacity: 1 }
+                : { scale: 1.05, opacity: 0 }
+            }
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{
+              opacity: 0,
+              transition: {
+                duration: CROSSFADE_DURATION_S,
+                ease: CROSSFADE_EASE,
+              },
+            }}
+            transition={
+              isFirstFrame
+                ? { ...springs.bgScale, delay: heroDelays.bg }
+                : {
+                    scale: {
+                      type: "spring",
+                      stiffness: 80,
+                      damping: 60,
+                      mass: 1,
+                    },
+                    opacity: {
+                      duration: CROSSFADE_DURATION_S,
+                      ease: CROSSFADE_EASE,
+                    },
+                  }
+            }
+            className="absolute inset-0"
+          >
+            <Image
+              src={HERO_GALLERY[index].src}
+              alt={HERO_GALLERY[index].alt}
+              fill
+              priority={isFirstFrame}
+              quality={92}
+              sizes="100vw"
+              className="object-cover"
+            />
+          </motion.div>
+        </AnimatePresence>
+
+        {/* Veil sutil — leitura tipográfica garantida */}
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/15 via-transparent to-black/40" />
+      </div>
 
       {/* Conteúdo */}
       <div className="relative z-10 flex h-full flex-col justify-between px-6 pb-12 pt-28 md:px-10 md:pb-16 md:pt-32">
@@ -62,7 +144,7 @@ export function Hero() {
             className="max-w-[360px] space-y-3"
           >
             <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-bg/70">
-              fa.Away — Consultoria de viagens
+              Fa.Away — Consultoria de viagens
             </p>
             <p className="font-body text-[14px] font-light leading-[1.55] text-bg/90 md:text-[15px]">
               Roteiros desenhados para quem entende viagem como autoria —
