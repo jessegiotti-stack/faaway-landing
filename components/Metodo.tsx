@@ -1,15 +1,29 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "framer-motion";
 import {
   revealCaption,
   revealContainer,
-  revealImage,
   revealItem,
   revealLine,
   revealLineContainer,
   revealViewport,
 } from "@/lib/motion";
+
+/**
+ * Spring pontual para a foto do Método. scale 1.05 → 1.0, perfil
+ * calmo (stiffness 80, damping 60) — diferente do preset revealImage
+ * (mais ágil) para deixar a janela contemplativa respirar.
+ */
+const metodoImageVariants = {
+  hidden: { opacity: 0, scale: 1.05 },
+  show: {
+    opacity: 1,
+    scale: 1,
+    transition: { type: "spring" as const, stiffness: 80, damping: 60, mass: 1 },
+  },
+};
 
 /**
  * Seção 04 — Método.
@@ -113,27 +127,27 @@ export function Metodo() {
         </div>
 
         {/* Foto — coluna direita, vertical, ofset baixo.
-           Placeholder atmosférico dark até novo ativo chegar. */}
+           Janela contemplativa — pedra, sombra, quietude.
+           (curadoria lp_novas: hf_063 — 736×981, retrato 3:4). */}
         <div className="col-span-12 md:col-start-9 md:col-span-4 md:mt-32 lg:col-start-10 lg:col-span-3 lg:mt-48">
           <motion.div
-            variants={revealImage}
-            aria-hidden
+            variants={metodoImageVariants}
             className="relative aspect-[2/3] w-full overflow-hidden bg-bg-deep"
           >
-            {/* Penumbra sutil para não ficar quadrado plano */}
-            <div
-              className="absolute inset-0"
-              style={{
-                background:
-                  "radial-gradient(ellipse at 50% 30%, rgba(122,90,46,0.18) 0%, transparent 60%)",
-              }}
+            <Image
+              src="/photos/metodo-janela-pedra.png"
+              alt=""
+              fill
+              sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 100vw"
+              quality={90}
+              className="object-cover"
             />
           </motion.div>
           <motion.p
             variants={revealCaption}
             className="mt-3 font-mono text-[10px] uppercase tracking-[0.16em] text-text-muted"
           >
-            (método · arquivo pendente)
+            (método · observação)
           </motion.p>
         </div>
       </motion.div>
