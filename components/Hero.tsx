@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useEffect, useState } from "react";
+import { preload } from "react-dom";
 import { springs, heroDelays } from "@/lib/motion";
 import { UnderlineLink } from "./UnderlineLink";
 
@@ -52,6 +53,17 @@ export function Hero() {
     if (reduce) return;
     const t = setTimeout(() => setRotationArmed(true), INITIAL_DELAY_MS);
     return () => clearTimeout(t);
+  }, [reduce]);
+
+  // Preload dos quadros 2 e 3 enquanto o quadro 1 está em tela.
+  // Sem isso, o primeiro crossfade (aos ~7s) mostra flash de loading
+  // porque as imagens só começam a baixar quando o <Image> monta.
+  // React 19 `preload` injeta <link rel="preload" as="image"> no head
+  // e deduplica chamadas. Pula sob reduced-motion (rotação desarmada).
+  useEffect(() => {
+    if (reduce) return;
+    preload("/photos/hero-02-suspension-dusk.png", { as: "image" });
+    preload("/photos/hero-03-greek-alt.png", { as: "image" });
   }, [reduce]);
 
   // Loop de rotação. Pausado enquanto isHovered ou sob reduced-motion.
