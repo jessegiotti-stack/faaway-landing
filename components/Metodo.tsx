@@ -8,8 +8,8 @@ import {
   revealItem,
   revealLine,
   revealLineContainer,
-  revealViewport,
 } from "@/lib/motion";
+import { useScrollReveal } from "@/lib/useScrollReveal";
 
 /**
  * Spring pontual para a foto do Método. scale 1.05 → 1.0, perfil
@@ -57,15 +57,14 @@ const ETAPAS = [
 ] as const;
 
 export function Metodo() {
+  const reveal = useScrollReveal();
   return (
     <section
       id="metodo"
       className="relative bg-bg px-6 py-28 text-text md:px-10 md:py-40"
     >
       <motion.div
-        initial="hidden"
-        whileInView="show"
-        viewport={revealViewport}
+        {...reveal}
         variants={revealContainer}
         className="mx-auto grid max-w-[1280px] grid-cols-12 gap-x-6 gap-y-14 md:gap-y-20"
       >

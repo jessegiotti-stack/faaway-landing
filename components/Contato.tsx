@@ -9,8 +9,8 @@ import {
   revealItem,
   revealLine,
   revealLineContainer,
-  revealViewport,
 } from "@/lib/motion";
+import { useScrollReveal } from "@/lib/useScrollReveal";
 import { WHATSAPP } from "@/lib/contact";
 
 /**
@@ -34,6 +34,8 @@ import { WHATSAPP } from "@/lib/contact";
 
 export function Contato() {
   const [submitted, setSubmitted] = useState(false);
+  const mainReveal = useScrollReveal();
+  const footerReveal = useScrollReveal();
 
   function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -46,9 +48,7 @@ export function Contato() {
       className="relative bg-bg px-6 pt-28 pb-12 text-text md:px-10 md:pt-40 md:pb-16"
     >
       <motion.div
-        initial="hidden"
-        whileInView="show"
-        viewport={revealViewport}
+        {...mainReveal}
         variants={revealContainer}
         className="mx-auto grid max-w-[1280px] grid-cols-12 gap-x-6 gap-y-14 md:gap-y-20"
       >
@@ -187,9 +187,7 @@ export function Contato() {
 
       {/* Rodapé editorial — assinatura final, layout 2 colunas */}
       <motion.div
-        initial="hidden"
-        whileInView="show"
-        viewport={revealViewport}
+        {...footerReveal}
         variants={revealContainer}
         className="mx-auto mt-32 grid max-w-[1280px] grid-cols-12 items-end gap-x-6 gap-y-8 border-t border-line pt-10 md:mt-44"
       >

@@ -9,8 +9,8 @@ import {
   revealItem,
   revealLine,
   revealLineContainer,
-  revealViewport,
 } from "@/lib/motion";
+import { useScrollReveal } from "@/lib/useScrollReveal";
 import { Parallax } from "./Parallax";
 
 /**
@@ -24,15 +24,14 @@ import { Parallax } from "./Parallax";
  *    headline (linha 1 + 2) → corpo.
  */
 export function Flavia() {
+  const reveal = useScrollReveal();
   return (
     <section
       id="flavia"
       className="relative bg-bg px-6 py-28 text-text md:px-10 md:py-40"
     >
       <motion.div
-        initial="hidden"
-        whileInView="show"
-        viewport={revealViewport}
+        {...reveal}
         variants={revealContainer}
         className="mx-auto grid max-w-[1280px] grid-cols-12 gap-x-6 gap-y-14 md:gap-y-20"
       >

@@ -9,8 +9,8 @@ import {
   revealItem,
   revealLine,
   revealLineContainer,
-  revealViewport,
 } from "@/lib/motion";
+import { useScrollReveal } from "@/lib/useScrollReveal";
 
 /**
  * Seção 02 — Manifesto.
@@ -25,15 +25,14 @@ import {
  */
 
 export function Manifesto() {
+  const reveal = useScrollReveal();
   return (
     <section
       id="manifesto"
       className="relative bg-bg px-6 py-28 text-text md:px-10 md:py-40"
     >
       <motion.div
-        initial="hidden"
-        whileInView="show"
-        viewport={revealViewport}
+        {...reveal}
         variants={revealContainer}
         className="mx-auto grid max-w-[1280px] grid-cols-12 gap-x-6 gap-y-14 md:gap-y-20"
       >

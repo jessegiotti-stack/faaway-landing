@@ -6,8 +6,8 @@ import {
   revealItem,
   revealLine,
   revealLineContainer,
-  revealViewport,
 } from "@/lib/motion";
+import { useScrollReveal } from "@/lib/useScrollReveal";
 
 /**
  * Seção 05 — Filosofia.
@@ -21,6 +21,7 @@ import {
  *  - Container orquestra: rótulo → headline (2 linhas) → corpo → aside.
  */
 export function Filosofia() {
+  const reveal = useScrollReveal();
   return (
     <section
       id="filosofia"
@@ -37,9 +38,7 @@ export function Filosofia() {
       />
 
       <motion.div
-        initial="hidden"
-        whileInView="show"
-        viewport={revealViewport}
+        {...reveal}
         variants={revealContainer}
         className="relative mx-auto grid max-w-[1280px] grid-cols-12 gap-x-6 gap-y-14"
       >

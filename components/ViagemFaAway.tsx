@@ -10,8 +10,8 @@ import {
   revealItem,
   revealLine,
   revealLineContainer,
-  revealViewport,
 } from "@/lib/motion";
+import { useScrollReveal } from "@/lib/useScrollReveal";
 import { Parallax } from "./Parallax";
 
 /**
@@ -221,12 +221,11 @@ function AtributoBloco({
 }) {
   const isSelf = hovered === index;
   const isOther = hovered !== null && hovered !== index;
+  const reveal = useScrollReveal();
 
   return (
     <motion.div
-      initial="hidden"
-      whileInView="show"
-      viewport={revealViewport}
+      {...reveal}
       variants={revealContainer}
       onMouseEnter={() => onHover(index)}
       onMouseLeave={onLeave}
@@ -245,6 +244,8 @@ function AtributoBloco({
 
 export function ViagemFaAway() {
   const [hovered, setHovered] = useState<number | null>(null);
+  const labelReveal = useScrollReveal();
+  const headlineReveal = useScrollReveal();
 
   return (
     <section
@@ -254,9 +255,7 @@ export function ViagemFaAway() {
       <div className="mx-auto max-w-[1280px]">
         {/* Editorial label + divisor */}
         <motion.div
-          initial="hidden"
-          whileInView="show"
-          viewport={revealViewport}
+          {...labelReveal}
           variants={revealContainer}
           className="mb-20 md:mb-28"
         >
@@ -276,9 +275,7 @@ export function ViagemFaAway() {
 
         {/* Headline introdutório — stagger linha-a-linha */}
         <motion.h2
-          initial="hidden"
-          whileInView="show"
-          viewport={revealViewport}
+          {...headlineReveal}
           variants={revealLineContainer}
           className="mb-32 max-w-[780px] font-display text-[clamp(40px,6.5vw,84px)] font-light uppercase leading-[0.92] tracking-[-0.035em] text-text md:mb-44"
         >
