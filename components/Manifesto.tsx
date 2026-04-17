@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 
@@ -7,16 +8,19 @@ import { useEffect, useRef, useState } from "react";
  * Seção 02 — Manifesto.
  * Define o que Fa.Away é antes de explicar quem ou como.
  * Composição assimétrica: texto em coluna esquerda estreita,
- * vídeo vertical-cropado offset à direita.
+ * imagem vertical-cropada offset à direita.
  *
  * Doutrina aplicada:
  *  - Sem reveals agressivos. Fade pontual no display headline.
- *  - Vídeo entra como âncora atmosférica em loop silencioso.
+ *  - Imagem entra como âncora atmosférica estática.
  *  - Spring de entrada 1.05 → 1.0 (stiffness 80, damping 60, mass 1)
- *    quando o vídeo entra no viewport pela primeira vez. Depois disso,
- *    o loop nativo assume e nada anima sobre ele.
- *  - autoplay + loop + muted + playsInline + preload metadata + sem controles.
- *  - Poster image (primeiro frame) evita flash em load.
+ *    quando a imagem entra no viewport pela primeira vez. Depois disso,
+ *    o quadro fica estável.
+ *
+ * Histórico: passou de vídeo (loop 7s) para still extraído do mesmo mp4
+ * (1920×1040 após crop de segurança das bordas pretas baked-in).
+ * Decisão editorial: o silêncio do still acompanha melhor o ritmo
+ * contemplativo do bloco.
  */
 
 const ENTRY_SPRING = {
@@ -27,12 +31,12 @@ const ENTRY_SPRING = {
 };
 
 export function Manifesto() {
-  const videoRef = useRef<HTMLVideoElement>(null);
+  const wrapperRef = useRef<HTMLDivElement>(null);
   const [inView, setInView] = useState(false);
 
   // IntersectionObserver dispara o spring de entrada UMA única vez.
   useEffect(() => {
-    const node = videoRef.current?.parentElement; // wrapper motion.div
+    const node = wrapperRef.current;
     if (!node) return;
     const io = new IntersectionObserver(
       ([entry]) => {
@@ -95,29 +99,26 @@ export function Manifesto() {
           </div>
         </div>
 
-        {/* Vídeo — coluna direita, vertical 2:3, offset (não toca borda) */}
+        {/* Imagem — coluna direita, vertical 2:3, offset (não toca borda) */}
         <div className="col-span-12 md:col-start-9 md:col-span-4 md:-mt-8 lg:col-start-9 lg:col-span-3 lg:-mt-16">
           <motion.div
+            ref={wrapperRef}
             initial={{ scale: 1.05 }}
             animate={inView ? { scale: 1 } : { scale: 1.05 }}
             transition={ENTRY_SPRING}
             className="relative aspect-[2/3] w-full overflow-hidden bg-bg-deep"
           >
-            <video
-              ref={videoRef}
-              autoPlay
-              loop
-              muted
-              playsInline
-              preload="metadata"
-              poster="/videos/manifesto-greek-walk-poster.jpg"
-              className="absolute inset-0 h-full w-full object-cover"
-            >
-              <source src="/videos/manifesto-greek-walk.mp4" type="video/mp4" />
-            </video>
+            <Image
+              src="/photos/manifesto-greek-still.png"
+              alt=""
+              fill
+              sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 100vw"
+              quality={92}
+              className="object-cover"
+            />
           </motion.div>
           <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.16em] text-text-muted">
-            (passagem · 7s loop)
+            (passagem · still)
           </p>
         </div>
       </div>
