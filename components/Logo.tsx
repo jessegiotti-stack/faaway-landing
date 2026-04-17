@@ -42,10 +42,12 @@ export function Logo({
   // Usa as CSS custom properties cruas declaradas em :root (globals.css).
   const color = tone === "dark" ? "var(--text)" : "var(--bg)";
 
+  // aria-label vive só no <Link> quando ele existe — evita screen reader
+  // anunciar "Fa.Away — início" duas vezes (role="img" no span + link label).
+  // Quando não há href, o span precisa carregar role/aria-label sozinho.
   const mark = (
     <span
-      role="img"
-      aria-label="Fa.Away — início"
+      {...(href ? { "aria-hidden": true } : { role: "img", "aria-label": "Fa.Away — início" })}
       className={`block transition-transform duration-300 ease-out hover:scale-[1.03] ${className}`}
       style={{
         width,
