@@ -126,16 +126,18 @@ export function Hero() {
       {/* Conteúdo */}
       <div className="relative z-10 flex h-full flex-col justify-between px-6 pb-12 pt-28 md:px-10 md:pb-16 md:pt-32">
         {/* Headline display — três linhas editoriais em cascata descendente
-            com deslocamento horizontal escalonado.
-             - Linha 1 (Viagens)      → offset 0
-             - Linha 2 (desenhadas)   → pl-[4%] mobile, pl-[10%] desktop
-             - Linha 3 (à mão. italic)→ pl-[8%] mobile, pl-[22%] desktop
-            Mesma escala tipográfica e line-height nas três. Italic só na
-            última. Entradas com stagger 80ms reforçando a descida
+            com deslocamento horizontal escalonado. Escala reduzida (~50%
+            do valor anterior) para ceder espaço visual à galeria hero.
+             - Linha 1 (VIAGENS)      → offset 0
+             - Linha 2 (DESENHADAS)   → pl-[4%] mobile, pl-[10%] desktop
+             - Linha 3 (À MÃO. italic)→ pl-[8%] mobile, pl-[22%] desktop
+            Todas em caixa alta (uppercase herdado do h1). Italic só na
+            última. Mesma escala e line-height (0.84) nas três — ritmo
+            vem só do translateX + stagger 80ms reforçando a descida
             (spring headlineRise: y:600→0, stiffness 108, damping 30). */}
         <div className="flex flex-1 items-center w-full">
           <motion.h1
-            className="font-display text-[clamp(72px,14vw,200px)] font-light uppercase leading-[0.84] tracking-[-0.04em] text-bg w-full"
+            className="font-display text-[clamp(36px,7vw,100px)] font-light uppercase leading-[0.84] tracking-[-0.04em] text-bg w-full"
             aria-label="Viagens desenhadas à mão"
           >
             <motion.span
@@ -156,7 +158,7 @@ export function Hero() {
                 ...springs.headlineRise,
                 delay: heroDelays.headline + 0.08,
               }}
-              className="block normal-case pl-[4%] md:pl-[10%]"
+              className="block pl-[4%] md:pl-[10%]"
             >
               desenhadas
             </motion.span>
@@ -167,7 +169,7 @@ export function Hero() {
                 ...springs.headlineRise,
                 delay: heroDelays.headline + 0.16,
               }}
-              className="block italic font-light normal-case pl-[8%] md:pl-[22%]"
+              className="block italic font-light pl-[8%] md:pl-[22%]"
             >
               à mão.
             </motion.span>
