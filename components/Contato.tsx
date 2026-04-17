@@ -1,9 +1,9 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
-import { useState, type FormEvent } from "react";
+import { motion } from "framer-motion";
 import { UnderlineLink } from "./UnderlineLink";
 import { Logo } from "./Logo";
+import { TallyButton } from "./TallyButton";
 import {
   revealContainer,
   revealItem,
@@ -18,29 +18,26 @@ import { WHATSAPP } from "@/lib/contact";
  *
  * Não é "fale conosco". É começo de uma conversa.
  *
- * Composição:
+ * Composição (pós-refactor Tally):
  *  - Headline display assimétrico à esquerda.
- *  - Form curto (nome, e-mail, mensagem) na coluna central, larga.
- *  - WhatsApp + endereço editorial no rodapé.
+ *  - Copy editorial introduzindo o gesto + CTA grande disparando popup Tally.
+ *  - WhatsApp atalho permanece como alternativa direta (coluna à direita).
+ *  - Rodapé editorial com logo, cidade, copyright.
  *
- * FASE D — sistema de reveals com stagger:
- *  - Container orquestra: rótulo → headline (linhas) → form/aside.
- *  - Form em si NÃO entra em stagger interno (todos campos juntos como bloco)
- *    para não criar latência percebida — o foco é a clareza, não a
- *    coreografia.
+ * Decisão editorial: o formulário inline (Nome/E-mail/WhatsApp/Mensagem) foi
+ * substituído por popup Tally único (formId vGx2xv) acionado também pelo
+ * CTA do hero. Centraliza fluxo de lead num único formulário gerenciado fora
+ * do repositório — Flávia edita campos via dashboard Tally sem deploy.
+ *
+ * FASE D — sistema de reveals com stagger preservado:
+ *  - Container orquestra: rótulo → headline (linhas) → copy/CTA/aside.
  */
 
 // Número real da Flávia vive em lib/contact.ts — fonte única de verdade.
 
 export function Contato() {
-  const [submitted, setSubmitted] = useState(false);
   const mainReveal = useScrollReveal();
   const footerReveal = useScrollReveal();
-
-  function onSubmit(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    setSubmitted(true);
-  }
 
   return (
     <section
@@ -84,85 +81,32 @@ export function Contato() {
           </motion.h2>
         </div>
 
-        {/* Form — coluna central larga */}
+        {/* Copy editorial + CTA principal — coluna larga à esquerda */}
         <motion.div
           variants={revealItem}
           className="col-span-12 md:col-start-1 md:col-span-8 lg:col-start-2 lg:col-span-7"
         >
-          <AnimatePresence mode="wait">
-            {!submitted ? (
-              <motion.form
-                key="form"
-                initial={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
-                onSubmit={onSubmit}
-                className="space-y-10"
-              >
-                <Field
-                  id="nome"
-                  label="01 — Nome"
-                  type="text"
-                  required
-                  autoComplete="name"
-                />
-                <Field
-                  id="email"
-                  label="02 — E-mail"
-                  type="email"
-                  required
-                  autoComplete="email"
-                />
-                <Field
-                  id="whatsapp"
-                  label="03 — WhatsApp (opcional)"
-                  type="tel"
-                  autoComplete="tel"
-                />
-                <FieldTextarea
-                  id="mensagem"
-                  label="04 — Conta um pouco"
-                  required
-                />
+          <div className="space-y-14 md:space-y-20">
+            <p className="max-w-[520px] font-body text-[16px] font-light leading-[1.62] text-text md:text-[18px]">
+              Antes de qualquer itinerário, uma conversa — aberta, sem pressa.
+              Entender o lugar, o tempo e o pretexto antes de desenhar a viagem.
+            </p>
 
-                <div className="pt-4">
-                  <button
-                    type="submit"
-                    className="group relative inline-flex items-baseline font-display text-[28px] font-light uppercase leading-none tracking-[-0.02em] text-text transition-opacity hover:opacity-70 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-current md:text-[36px]"
-                  >
-                    <span className="relative">
-                      Enviar
-                      <span className="absolute -bottom-1 left-0 h-px w-full bg-text" />
-                      <span className="absolute -bottom-1 left-0 h-px w-0 bg-text transition-[width] duration-[260ms] ease-[cubic-bezier(0.22,0.61,0.36,1)] group-hover:w-[110%]" />
-                    </span>
-                    <span className="ml-3">→</span>
-                  </button>
-                </div>
-              </motion.form>
-            ) : (
-              <motion.div
-                key="success"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.7, ease: [0.4, 0, 0.2, 1] }}
-                className="space-y-6"
+            <div>
+              <span className="mb-5 block font-mono text-[10px] uppercase tracking-[0.18em] text-text-muted">
+                (próximo passo)
+              </span>
+              <TallyButton
+                formId="vGx2xv"
+                className="font-display text-[clamp(36px,5.5vw,56px)] font-light uppercase leading-none tracking-[-0.025em] text-text"
               >
-                <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-muted">
-                  (recebido)
-                </span>
-                <p className="font-display text-[clamp(32px,4.5vw,52px)] font-light uppercase leading-[0.95] tracking-[-0.03em] text-text">
-                  Obrigada.
-                  <br />
-                  <span className="italic font-light normal-case tracking-[-0.02em]">
-                    Respondo em até 48 horas.
-                  </span>
-                </p>
-              </motion.div>
-            )}
-          </AnimatePresence>
+                Agendar conversa →
+              </TallyButton>
+            </div>
+          </div>
         </motion.div>
 
-        {/* WhatsApp aside — direita */}
+        {/* WhatsApp aside — direita, mantido como alternativa direta */}
         <motion.div
           variants={revealItem}
           className="col-span-12 md:col-start-9 md:col-span-4 lg:col-start-10 lg:col-span-3"
@@ -179,7 +123,7 @@ export function Contato() {
               WhatsApp →
             </UnderlineLink>
             <p className="max-w-[260px] font-body text-[13px] font-light leading-[1.55] text-text-muted md:text-[14px]">
-              Para conversa direta. Resposta em fuso de Belo Horizonte.
+              Para uma troca rápida, em tempo real.
             </p>
           </div>
         </motion.div>
