@@ -4,6 +4,7 @@ import Image from "next/image";
 import {
   animate,
   motion,
+  useInView,
   useMotionValue,
   useAnimationFrame,
   useReducedMotion,
@@ -59,6 +60,11 @@ export function Marquee() {
   const speed = useMotionValue(1);
   const [, setReady] = useState(false);
   const mountedRef = useRef(false);
+  const sectionRef = useRef<HTMLElement>(null);
+  // Pausa o rAF quando o marquee sai do viewport. Margem 100px cria
+  // buffer — começa a animar um pouco antes de aparecer e continua
+  // um pouco depois de sair, evitando flicker nos limites.
+  const inView = useInView(sectionRef, { margin: "100px" });
   const reduce = useReducedMotion();
 
   // Garantir que useAnimationFrame só roda client-side.
@@ -71,7 +77,11 @@ export function Marquee() {
   }, []);
 
   useAnimationFrame((_t, delta) => {
-    if (!mountedRef.current || reduce) return;
+    // Early exit se: desmontado, reduced-motion, ou fora do viewport.
+    // O último caso economiza 60fps de rAF + sub no scroll quando o
+    // usuário está no Contato (seção 07) e o marquee (entre 04 e 05)
+    // está atrás sem ser visto.
+    if (!mountedRef.current || reduce || !inView) return;
     const dx = (delta / 1000) * PIXELS_PER_SECOND * speed.get();
     let next = x.get() - dx;
     // Reset suave quando completou uma metade — o quadro final
@@ -84,6 +94,7 @@ export function Marquee() {
 
   return (
     <section
+      ref={sectionRef}
       aria-hidden
       onMouseEnter={() => {
         if (!reduce) animate(speed, 0, { duration: 0.8, ease: [0.4, 0, 0.2, 1] });
