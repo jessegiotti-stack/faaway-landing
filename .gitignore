@@ -24,6 +24,13 @@
 .DS_Store
 *.pem
 
+# Bibliotecas de trabalho não versionadas (brutos HighFlux / dumps soltos).
+# Apenas os ativos curados em assets/photos, assets/videos, assets/brand entram no repo.
+/assets/lp_novas/
+/assets/*.jpeg
+/assets/*.jpg
+/assets/*.png
+
 # debug
 npm-debug.log*
 yarn-debug.log*
