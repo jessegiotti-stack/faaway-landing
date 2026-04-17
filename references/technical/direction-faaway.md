@@ -1,4 +1,4 @@
-# Direção de Arte — LP Institucional fa.Away
+# Direção de Arte — LP Institucional Fa.Away
 
 > Documento consolidado e travado em 2026-04-16. Autossuficiente para Claude Code executar build sem clarificações.
 
@@ -6,7 +6,7 @@
 
 ## Cliente e produto
 
-LP institucional fa.Away. Consultoria boutique de luxo, modelo fee-based. Serviço: viagens personalizadas com acompanhamento cuidadoso e atenção ao detalhe. Flávia Werneck como consultora especializada. Aspiração: posicionamento em território Takumians (Traveller Made). Lema: *"fazer à mão"*.
+LP institucional Fa.Away. Consultoria boutique de luxo, modelo fee-based. Serviço: viagens personalizadas com acompanhamento cuidadoso e atenção ao detalhe. Flávia Werneck como consultora especializada. Aspiração: território boutique de luxo editorial, operação autoral fee-based. Lema: *"fazer à mão"*.
 
 ## Função da LP
 
@@ -100,7 +100,7 @@ Evocar artesania, curadoria manual, marca do autor — SEM literalismo. Nada de 
 - Parênteses mono como aside autoral, uso comedido.
 - Pipes "|" em micro-copy de header.
 - Em-dash "—" em body.
-- Wordmark fa.Away: SVG/PNG dedicado, não H1 de texto.
+- Wordmark Fa.Away: SVG/PNG dedicado, não H1 de texto.
 
 ---
 
