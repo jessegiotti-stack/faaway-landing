@@ -54,13 +54,13 @@ export function Contato() {
         {/* Editorial label + divisor */}
         <motion.div
           variants={revealItem}
-          className="col-span-12 flex items-baseline gap-4"
+          className="group col-span-12 flex items-baseline gap-4"
         >
-          <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-muted">
+          <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-muted transition-colors duration-300 group-hover:text-text">
             07 — Contato
           </span>
           <span aria-hidden className="h-px flex-1 bg-line" />
-          <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-text/40">
+          <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-text/40 transition-colors duration-300 group-hover:text-text">
             (começo)
           </span>
         </motion.div>
@@ -245,7 +245,7 @@ function Field({
         type={type}
         required={required}
         autoComplete={autoComplete}
-        className="w-full border-b border-line bg-transparent pb-3 font-body text-[18px] font-light text-text placeholder:text-text/30 focus:border-text focus:outline-none md:text-[20px]"
+        className="w-full border-b border-line bg-transparent pb-3 font-body text-[18px] font-light text-text placeholder:text-text/30 transition-colors duration-200 hover:border-text-muted focus:border-text focus:outline-none md:text-[20px]"
       />
     </div>
   );
@@ -273,7 +273,7 @@ function FieldTextarea({
         name={id}
         required={required}
         rows={4}
-        className="w-full resize-none border-b border-line bg-transparent pb-3 font-body text-[18px] font-light leading-[1.5] text-text placeholder:text-text/30 focus:border-text focus:outline-none md:text-[20px]"
+        className="w-full resize-none border-b border-line bg-transparent pb-3 font-body text-[18px] font-light leading-[1.5] text-text placeholder:text-text/30 transition-colors duration-200 hover:border-text-muted focus:border-text focus:outline-none md:text-[20px]"
       />
     </div>
   );

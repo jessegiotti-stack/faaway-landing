@@ -39,13 +39,13 @@ export function Flavia() {
         {/* Editorial label + divisor */}
         <motion.div
           variants={revealItem}
-          className="col-span-12 flex items-baseline gap-4"
+          className="group col-span-12 flex items-baseline gap-4"
         >
-          <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-muted">
+          <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-muted transition-colors duration-300 group-hover:text-text">
             03 — Flávia
           </span>
           <span aria-hidden className="h-px flex-1 bg-line" />
-          <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-text/40">
+          <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-text/40 transition-colors duration-300 group-hover:text-text">
             (quem)
           </span>
         </motion.div>
@@ -54,7 +54,7 @@ export function Flavia() {
         <div className="col-span-12 md:col-start-1 md:col-span-5 lg:col-start-2 lg:col-span-4">
           <motion.div
             variants={revealImage}
-            className="relative aspect-[4/5] w-full overflow-hidden bg-bg-deep"
+            className="group relative aspect-[4/5] w-full overflow-hidden bg-bg-deep"
           >
             <Parallax intensity={8}>
               <Image
@@ -63,7 +63,7 @@ export function Flavia() {
                 fill
                 sizes="(min-width: 1024px) 33vw, (min-width: 768px) 42vw, 100vw"
                 quality={92}
-                className="object-cover"
+                className="object-cover transition-[transform,filter] duration-[400ms] ease-out group-hover:scale-[1.02] group-hover:brightness-[1.03]"
               />
             </Parallax>
           </motion.div>

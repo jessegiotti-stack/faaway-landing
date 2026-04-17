@@ -90,9 +90,9 @@ export function Marquee() {
         whileInView="show"
         viewport={revealViewport}
         variants={revealItem}
-        className="mx-auto mb-8 flex max-w-[1280px] items-baseline gap-4 px-6 md:mb-10 md:px-10"
+        className="group mx-auto mb-8 flex max-w-[1280px] items-baseline gap-4 px-6 md:mb-10 md:px-10"
       >
-        <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-muted">
+        <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-muted transition-colors duration-300 group-hover:text-text">
           (passagem)
         </span>
         <span aria-hidden className="h-px flex-1 bg-line" />

@@ -40,13 +40,13 @@ export function Manifesto() {
         {/* Editorial label + divisor — Low Tide system */}
         <motion.div
           variants={revealItem}
-          className="col-span-12 flex items-baseline gap-4"
+          className="group col-span-12 flex items-baseline gap-4"
         >
-          <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-muted">
+          <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-muted transition-colors duration-300 group-hover:text-text">
             02 — Manifesto
           </span>
           <span aria-hidden className="h-px flex-1 bg-line" />
-          <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-text/40">
+          <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-text/40 transition-colors duration-300 group-hover:text-text">
             (o que)
           </span>
         </motion.div>
@@ -90,7 +90,7 @@ export function Manifesto() {
         <div className="col-span-12 md:col-start-9 md:col-span-4 md:-mt-8 lg:col-start-9 lg:col-span-3 lg:-mt-16">
           <motion.div
             variants={revealImage}
-            className="relative aspect-[2/3] w-full overflow-hidden bg-bg-deep"
+            className="group relative aspect-[2/3] w-full overflow-hidden bg-bg-deep"
           >
             <Image
               src="/photos/manifesto-greek-still.png"
@@ -98,7 +98,7 @@ export function Manifesto() {
               fill
               sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 100vw"
               quality={92}
-              className="object-cover"
+              className="object-cover transition-[transform,filter] duration-[400ms] ease-out group-hover:scale-[1.02] group-hover:brightness-[1.03]"
             />
           </motion.div>
           <motion.p

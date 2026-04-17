@@ -46,7 +46,7 @@ export function Logo({
     <span
       role="img"
       aria-label="Fa.Away — início"
-      className={`block ${className}`}
+      className={`block transition-transform duration-300 ease-out hover:scale-[1.03] ${className}`}
       style={{
         width,
         height,
@@ -59,6 +59,7 @@ export function Logo({
         maskPosition: "center",
         WebkitMaskSize: "contain",
         maskSize: "contain",
+        transformOrigin: "left center",
       }}
     />
   );

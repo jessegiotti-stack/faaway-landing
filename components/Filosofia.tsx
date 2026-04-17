@@ -46,13 +46,13 @@ export function Filosofia() {
         {/* Editorial label + divisor */}
         <motion.div
           variants={revealItem}
-          className="col-span-12 flex items-baseline gap-4"
+          className="group col-span-12 flex items-baseline gap-4"
         >
-          <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-bg/60">
+          <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-bg/60 transition-colors duration-300 group-hover:text-bg">
             05 — Filosofia
           </span>
           <span aria-hidden className="h-px flex-1 bg-bg/15" />
-          <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-bg/40">
+          <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-bg/40 transition-colors duration-300 group-hover:text-bg">
             (por que)
           </span>
         </motion.div>

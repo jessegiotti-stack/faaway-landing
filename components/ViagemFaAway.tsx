@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { useState, type ReactNode } from "react";
 import {
   revealCaption,
   revealContainer,
@@ -22,11 +23,14 @@ import { Parallax } from "./Parallax";
  *  - Atributo 02: foto à esquerda (offset baixo), texto à direita.
  *  - Atributo 03: foto centralizada e menor, texto abaixo curto.
  *
- * FASE D — sistema de reveals com stagger:
- *  - Cada atributo é um container independente com viewport individual.
- *  - Ordem dentro do bloco: imagem (scale 1.04 → 1.0) e texto orquestrados
- *    por revealContainer (label → headline → body).
- *  - Headline introdutório usa stagger linha-a-linha.
+ * FASE D — sistemas integrados:
+ *  - Reveals com stagger por bloco (revealContainer + revealItem/Image/Caption).
+ *  - Parallax sutil em Tempo + Acesso (intensity 6).
+ *  - Hover cross-card: o atributo sob cursor escala 1.01 + brightness 1.03;
+ *    os outros dois desaturam para opacity 0.6 ao longo de 500ms. Estado
+ *    içado para o componente raiz para coordenar entre cards.
+ *  - Hover de imagem (scale 1.02 + brightness) é adicionado dentro do frame
+ *    via group/group-hover na própria <Image>.
  *
  * Atributos 01 (Tempo) e 02 (Acesso) integram fotos editoriais (Pinterest
  * scrape, baixa-res). Para respeitar o critério 2x retina, os spans de
@@ -82,7 +86,7 @@ function PhotoFrame({
       fill
       sizes="(min-width: 1024px) 25vw, (min-width: 768px) 40vw, 100vw"
       quality={90}
-      className="object-cover"
+      className="object-cover transition-[transform,filter] duration-[400ms] ease-out group-hover:scale-[1.02] group-hover:brightness-[1.03]"
     />
   ) : (
     // Placeholder atmosférico — penumbra âmbar sutil
@@ -100,7 +104,7 @@ function PhotoFrame({
     <>
       <motion.div
         variants={revealImage}
-        className="relative w-full overflow-hidden bg-bg-deep"
+        className="group relative w-full overflow-hidden bg-bg-deep"
         style={{ aspectRatio: aspect }}
       >
         {parallax > 0 ? <Parallax intensity={parallax}>{img}</Parallax> : img}
@@ -118,6 +122,7 @@ function PhotoFrame({
 /**
  * VideoFrame — mesma mecânica visual do PhotoFrame, mas com <video> em loop.
  * autoplay + loop + muted + playsInline + preload metadata + sem controles.
+ * Hover scale + brightness aplicado no próprio video element.
  */
 function VideoFrame({
   src,
@@ -134,7 +139,7 @@ function VideoFrame({
     <>
       <motion.div
         variants={revealImage}
-        className="relative w-full overflow-hidden bg-bg-deep"
+        className="group relative w-full overflow-hidden bg-bg-deep"
         style={{ aspectRatio: aspect }}
       >
         <video
@@ -144,7 +149,7 @@ function VideoFrame({
           playsInline
           preload="metadata"
           poster={poster}
-          className="absolute inset-0 h-full w-full object-cover"
+          className="absolute inset-0 h-full w-full object-cover transition-[transform,filter] duration-[400ms] ease-out group-hover:scale-[1.02] group-hover:brightness-[1.03]"
         >
           <source src={src} type="video/mp4" />
         </video>
@@ -193,7 +198,54 @@ function AtributoTexto({
   );
 }
 
+/**
+ * AtributoBloco — wrapper externo que carrega:
+ *  - reveal stagger via revealContainer + viewport
+ *  - hover cross-card via classes condicionais (state içado)
+ * O quadro inteiro (texto + foto) é o trigger.
+ */
+function AtributoBloco({
+  index,
+  hovered,
+  onHover,
+  onLeave,
+  className,
+  children,
+}: {
+  index: number;
+  hovered: number | null;
+  onHover: (i: number) => void;
+  onLeave: () => void;
+  className: string;
+  children: ReactNode;
+}) {
+  const isSelf = hovered === index;
+  const isOther = hovered !== null && hovered !== index;
+
+  return (
+    <motion.div
+      initial="hidden"
+      whileInView="show"
+      viewport={revealViewport}
+      variants={revealContainer}
+      onMouseEnter={() => onHover(index)}
+      onMouseLeave={onLeave}
+      className={`${className} transition-[transform,opacity,filter] duration-500 ease-out`}
+      style={{
+        transform: isSelf ? "scale(1.01)" : "scale(1)",
+        opacity: isOther ? 0.6 : 1,
+        filter: isSelf ? "brightness(1.03)" : "brightness(1)",
+        transformOrigin: "center",
+      }}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
 export function ViagemFaAway() {
+  const [hovered, setHovered] = useState<number | null>(null);
+
   return (
     <section
       id="viagem"
@@ -210,13 +262,13 @@ export function ViagemFaAway() {
         >
           <motion.div
             variants={revealItem}
-            className="flex items-baseline gap-4"
+            className="group flex items-baseline gap-4"
           >
-            <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-muted">
+            <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-muted transition-colors duration-300 group-hover:text-text">
               06 — Viagem Fa.Away
             </span>
             <span aria-hidden className="h-px flex-1 bg-line" />
-            <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-text/40">
+            <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-text/40 transition-colors duration-300 group-hover:text-text">
               (o que faz)
             </span>
           </motion.div>
@@ -242,11 +294,11 @@ export function ViagemFaAway() {
         </motion.h2>
 
         {/* Atributo 01 — foto à direita (offset alto), texto à esquerda */}
-        <motion.div
-          initial="hidden"
-          whileInView="show"
-          viewport={revealViewport}
-          variants={revealContainer}
+        <AtributoBloco
+          index={0}
+          hovered={hovered}
+          onHover={setHovered}
+          onLeave={() => setHovered(null)}
           className="mb-32 grid grid-cols-12 gap-x-6 gap-y-10 md:mb-44"
         >
           <div className="col-span-12 md:col-start-1 md:col-span-5 md:mt-32 lg:col-start-2 lg:col-span-4 lg:mt-40">
@@ -261,14 +313,14 @@ export function ViagemFaAway() {
               parallax={6}
             />
           </div>
-        </motion.div>
+        </AtributoBloco>
 
         {/* Atributo 02 — foto à esquerda (offset baixo), texto à direita */}
-        <motion.div
-          initial="hidden"
-          whileInView="show"
-          viewport={revealViewport}
-          variants={revealContainer}
+        <AtributoBloco
+          index={1}
+          hovered={hovered}
+          onHover={setHovered}
+          onLeave={() => setHovered(null)}
           className="mb-32 grid grid-cols-12 gap-x-6 gap-y-10 md:mb-44"
         >
           <div className="col-span-12 md:col-start-1 md:col-span-5 lg:col-start-2 lg:col-span-3">
@@ -283,14 +335,14 @@ export function ViagemFaAway() {
           <div className="col-span-12 md:col-start-7 md:col-span-6 md:mt-48 lg:col-start-7 lg:col-span-5 lg:mt-56">
             <AtributoTexto {...ATRIBUTOS[1]} />
           </div>
-        </motion.div>
+        </AtributoBloco>
 
         {/* Atributo 03 — vídeo centralizado menor, texto abaixo */}
-        <motion.div
-          initial="hidden"
-          whileInView="show"
-          viewport={revealViewport}
-          variants={revealContainer}
+        <AtributoBloco
+          index={2}
+          hovered={hovered}
+          onHover={setHovered}
+          onLeave={() => setHovered(null)}
           className="grid grid-cols-12 gap-x-6 gap-y-8"
         >
           <div className="col-span-12 md:col-start-4 md:col-span-6 lg:col-start-5 lg:col-span-4">
@@ -304,7 +356,7 @@ export function ViagemFaAway() {
           <div className="col-span-12 md:col-start-4 md:col-span-6 lg:col-start-5 lg:col-span-4">
             <AtributoTexto {...ATRIBUTOS[2]} />
           </div>
-        </motion.div>
+        </AtributoBloco>
       </div>
     </section>
   );

@@ -58,13 +58,13 @@ export function Metodo() {
         {/* Editorial label + divisor */}
         <motion.div
           variants={revealItem}
-          className="col-span-12 flex items-baseline gap-4"
+          className="group col-span-12 flex items-baseline gap-4"
         >
-          <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-muted">
+          <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-muted transition-colors duration-300 group-hover:text-text">
             04 — Método
           </span>
           <span aria-hidden className="h-px flex-1 bg-line" />
-          <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-text/40">
+          <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-text/40 transition-colors duration-300 group-hover:text-text">
             (como)
           </span>
         </motion.div>
