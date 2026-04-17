@@ -1,18 +1,30 @@
 import Link from "next/link";
-import type { ReactNode } from "react";
+import type { MouseEvent, ReactNode } from "react";
 
 /**
  * Underline hover de duas barras (contrato Futrue).
  * Barra 1: width fixa. Barra 2: 0% → 110% no hover, ~260ms.
+ *
+ * Aceita `onClick` pass-through — usado por componentes que precisam
+ * reagir ao clique (fechamento do menu Nav, interceptação de âncora
+ * para scroll Lenis etc.). O click nativo do link segue funcionando
+ * a menos que o handler chame preventDefault.
  */
 type Props = {
   href: string;
   children: ReactNode;
   className?: string;
   external?: boolean;
+  onClick?: (e: MouseEvent<HTMLAnchorElement>) => void;
 };
 
-export function UnderlineLink({ href, children, className = "", external = false }: Props) {
+export function UnderlineLink({
+  href,
+  children,
+  className = "",
+  external = false,
+  onClick,
+}: Props) {
   const inner = (
     <span className="group relative inline-block">
       <span className="relative z-10">{children}</span>
@@ -29,13 +41,19 @@ export function UnderlineLink({ href, children, className = "", external = false
 
   if (external) {
     return (
-      <a href={href} className={className} target="_blank" rel="noopener noreferrer">
+      <a
+        href={href}
+        className={className}
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={onClick}
+      >
         {inner}
       </a>
     );
   }
   return (
-    <Link href={href} className={className}>
+    <Link href={href} className={className} onClick={onClick}>
       {inner}
     </Link>
   );

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { UnderlineLink } from "./UnderlineLink";
 import { Logo } from "./Logo";
@@ -21,6 +21,15 @@ const NAV_ITEMS = [
  */
 export function Nav() {
   const [open, setOpen] = useState(false);
+
+  // Fecha o painel ao mudar de âncora (usuário clicou em item de navegação
+  // ou o endereço mudou por outra via). Garante que, em mobile, o painel
+  // não continue cobrindo a seção destino.
+  useEffect(() => {
+    const handle = () => setOpen(false);
+    window.addEventListener("hashchange", handle);
+    return () => window.removeEventListener("hashchange", handle);
+  }, []);
 
   return (
     <>
@@ -68,6 +77,7 @@ export function Nav() {
                   </span>
                   <UnderlineLink
                     href={item.href}
+                    onClick={() => setOpen(false)}
                     className="font-display text-[28px] font-light leading-none tracking-[-0.025em] md:text-[34px]"
                   >
                     {item.label}
